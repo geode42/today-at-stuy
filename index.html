@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Today at Stuy</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="script.js" defer></script>
+	<link rel="prefetch" href="https://worldtimeapi.org/api/timezone/America/New_York" />
+    <link rel="manifest" href="manifest.json" />
+</head>
+<body>
+	<main>
+		<!-- Top section -->
+		<div id="top-section">
+			<div id="time-elapsed-remaining-container">
+				<div class="elapsed-remaining-boxes">
+					<div>
+						<span id="time-elapsed" class="elapsed-remaining-numbers"></span><span id="time-elapsed-units" class="elapsed-remaining-units"></span>
+					</div>
+					<div class="elapsed-remaining-label">Elapsed</div>
+				</div>
+				<div class="vertical-separator"></div>
+				<div class="elapsed-remaining-boxes">
+					<div>
+						<span id="time-remaining" class="elapsed-remaining-numbers"></span><span id="time-remaining-units" class="elapsed-remaining-units"></span>
+					</div>
+					<div class="elapsed-remaining-label">Remaining</div>
+				</div>
+			</div>
+			<div id="bell-schedule-table">
+				<div id="bell-schedule-table-header-row">
+					<div>Period</div>
+					<div>Start Time</div>
+					<div>End Time</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Bottom section -->
+		<div>
+			<span id="a-day-b-day-before"></span>
+			<span id="a-day-b-day"></span>
+			<span id="a-day-b-day-after">day</span>
+		</div>
+		</main>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<svg width='100' height='100' xmlns="http://www.w3.org/2000/svg">
+	<!-- Gradients borrowed from Vite's logo, I could change them if need be -->
+	<defs>
+		<linearGradient id="bg" x1="-.828%" x2="57.636%" y1="7.652%" y2="78.411%">
+			<stop offset="0%" stop-color="#41D1FF"></stop>
+			<stop offset="100%" stop-color="#BD34FE"></stop>
+		</linearGradient>
+		<linearGradient id="fg" x1="43.376%" x2="50.316%" y1="2.242%" y2="89.03%">
+			<stop offset="0%" stop-color="#FFEA83"></stop>
+			<stop offset="8.333%" stop-color="#FFDD35"></stop>
+			<stop offset="100%" stop-color="#FFA800"></stop>
+		</linearGradient>
+	</defs>
+	<circle cx='50' cy='50' r='42' fill='url(#bg)' />
+	<polyline
+		points="50,6 50,50 81.113,81.113"
+		fill='none'
+		stroke='url(#fg)'
+		stroke-linejoin='round'
+		stroke-linecap='round'
+		stroke-width='12'
+		style='filter: drop-shadow(0 0 15px #0468)'
+	/>
+</svg>

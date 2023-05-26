@@ -1,0 +1,9 @@
+{
+	"short_name": "Stuy",
+	"name": "Today at Stuy",
+	"start_url": "/stuy",
+	"background_color": "#222",
+	"display": "standalone",
+	"scope": "/stuy",
+	"description": "Bell Schedule info for Stuy"
+}
