@@ -5,53 +5,11 @@ const rootElement = document.documentElement
 const lightThemeOptionsContainer = document.getElementById('light-theme-options-container')
 const darkThemeOptionsContainer = document.getElementById('dark-theme-options-container')
 const themeOverrideContainer = document.getElementById('theme-override-container')
+const themeCustomizationMenu = document.getElementById('theme-customization-menu')
+const optionsMenuOpenButton = document.getElementById('options-menu-open-button')
+const customizeThemeHeader = document.getElementById('customize-theme-header')
 
-themeOverrideContainer.append(
-	createRadioButton('theme-override-button', 'Light', () => {themeOverride='light'; updatePrefersDark(); applyCurrentTheme()}),
-	createRadioButton('theme-override-button', 'Dark', () => {themeOverride='dark'; updatePrefersDark(); applyCurrentTheme()}),
-	createRadioButton('theme-override-button', 'Auto', () => {themeOverride=''; updatePrefersDark(); applyCurrentTheme()}, true)
-)
-
-let themeOverride = ''
-let currentLightTheme = 'light'
-let currentDarkTheme = 'dark'
-
-let useDarkTheme = false
-let deviceDarkModePreference = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-
-function createRadioButton(group, text, onclick, active=false) {
-	const button = document.createElement('button')
-	button.textContent = text
-	button.classList.add('radio-button')
-	button.classList.add(group)
-	if (active) button.classList.add('active')
-
-	button.onclick = (e) => {
-		document.querySelectorAll(`.radio-button.${group}`).forEach(e => e.classList.remove('active'))
-		button.classList.add('active')
-		onclick(e)
-	}
-
-	return button
-}
-
-function updatePrefersDark() {
-	if (themeOverride == 'light') {
-		useDarkTheme = false
-		return
-	}
-	if (themeOverride == 'dark') {
-		useDarkTheme = true
-		return
-	}
-	useDarkTheme = deviceDarkModePreference
-}
-
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-	deviceDarkModePreference = event.matches
-	updatePrefersDark()
-	applyCurrentTheme()
-})
+// optionsDialog.showModal()
 
 const themes = [
 	{
@@ -89,9 +47,106 @@ const themes = [
 		}
 	}
 ]
-
+// Add base custom themes
 themes.push({name: 'custom-light', fallback: 'light', isDarkTheme: false, colors: structuredClone(getTheme('light').colors)})
 themes.push({name: 'custom-dark', fallback: 'dark', isDarkTheme: true, colors: structuredClone(getTheme('dark').colors)})
+
+
+let themeOverride = ''
+let currentLightTheme = 'light'
+let currentDarkTheme = 'dark'
+
+
+function loadThemeOverride() {
+	themeOverride = localStorage.getItem('theme-override') ?? themeOverride
+}
+
+function loadCurrentLightAndDarkThemes() {
+	currentLightTheme = localStorage.getItem('active-light-theme') ?? currentLightTheme
+	currentDarkTheme = localStorage.getItem('active-dark-theme') ?? currentDarkTheme
+}
+
+let useDarkTheme = false
+let deviceDarkModePreference = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+
+function createThemeOverrideOptions() {
+	themeOverrideContainer.append(
+		createRadioButton('theme-override-button', 'Light', () => {themeOverride='light'; updatePrefersDark(); applyCurrentTheme(); localStorage.setItem('theme-override', 'light')}, themeOverride == 'light'),
+		createRadioButton('theme-override-button', 'Dark', () => {themeOverride='dark'; updatePrefersDark(); applyCurrentTheme(); localStorage.setItem('theme-override', 'dark')}, themeOverride == 'dark'),
+		createRadioButton('theme-override-button', 'Auto', () => {themeOverride=''; updatePrefersDark(); applyCurrentTheme(); localStorage.setItem('theme-override', '')}, themeOverride == '')
+	)
+}
+
+function updatePrefersDark() {
+	if (themeOverride == 'light') {
+		useDarkTheme = false
+		return
+	}
+	if (themeOverride == 'dark') {
+		useDarkTheme = true
+		return
+	}
+	useDarkTheme = deviceDarkModePreference
+}
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+	deviceDarkModePreference = event.matches
+	updatePrefersDark()
+	applyCurrentTheme()
+})
+
+function updateCustomizeCurrentTheme() {
+	customizeThemeHeader.textContent = 'Customize __________'
+	themeCustomizationMenu.replaceChildren()
+	if (!(useDarkTheme ? currentDarkTheme.includes('custom') : currentLightTheme.includes('custom'))) {
+		themeCustomizationMenu.append(createDiv('The active theme must be a "custom" theme to be customized!'))
+		return
+	}
+
+	customizeThemeHeader.textContent = `Customize ${useDarkTheme ? currentDarkTheme : currentLightTheme}`
+
+	const theme = getTheme(useDarkTheme ? currentDarkTheme : currentLightTheme)
+
+	const resetButton = document.createElement('button')
+	resetButton.textContent = 'Reset to built-in theme'
+	resetButton.onclick = () => {
+		resetTheme(useDarkTheme ? currentDarkTheme : currentLightTheme)
+	}
+
+	
+	const colorContainer = createDiv('', 'color-container')
+	themeCustomizationMenu.append(resetButton, colorContainer)
+
+	for (const color in theme.colors) {
+		const button = document.createElement('button')
+		button.textContent = color
+		button.onclick = () => {letUserChangeCSSVariableColor(useDarkTheme ? currentDarkTheme : currentLightTheme, color)}
+		colorContainer.append(button)
+	}
+}
+
+function currentThemeChange() {
+	updateCustomizeCurrentTheme()
+	updateThemeOptionsContainers()
+}
+
+
+
+function createRadioButton(group, text, onclick, active=false) {
+	const button = document.createElement('button')
+	button.textContent = text
+	button.classList.add('radio-button')
+	button.classList.add(group)
+	if (active) button.classList.add('active')
+
+	button.onclick = (e) => {
+		document.querySelectorAll(`.radio-button.${group}`).forEach(e => e.classList.remove('active'))
+		button.classList.add('active')
+		onclick(e)
+	}
+
+	return button
+}
 
 function updateThemeOptionsContainers() {
 	lightThemeOptionsContainer.replaceChildren()
@@ -100,14 +155,18 @@ function updateThemeOptionsContainers() {
 		if (theme.fallback == 'light') {
 			const button = createRadioButton('light-theme-option', theme.name, () => {
 				currentLightTheme = theme.name
+				localStorage.setItem('active-light-theme', theme.name)
 				applyCurrentTheme()
 			}, currentLightTheme == theme.name)
+			if (useDarkTheme) button.classList.add('slightly-hidden')
 			lightThemeOptionsContainer.append(button)
 		} else {
 			const button = createRadioButton('dark-theme-option', theme.name, () => {
 				currentDarkTheme = theme.name
+				localStorage.setItem('active-dark-theme', theme.name)
 				applyCurrentTheme()
 			}, currentDarkTheme == theme.name)
+			if (!useDarkTheme) button.classList.add('slightly-hidden')
 			darkThemeOptionsContainer.append(button)
 		}
 	}
@@ -182,9 +241,8 @@ function applyCurrentTheme() {
 			rootElement.style.setProperty('--' + variableName, '#' + fallback.colors[variableName])
 		}
 	}
+	currentThemeChange()
 }
-
-applyCurrentTheme()
 
 
 function letUserChangeCSSVariableColor(themeName, cssVariableName) {
@@ -257,18 +315,22 @@ function letUserChangeCSSVariableColor(themeName, cssVariableName) {
 	}
 
 	optionsDialog.close()
+	optionsMenuOpenButton.toggleAttribute('hidden')
 	document.body.append(colorPicker)
+	rootElement.style.setProperty('--compact-ui', '1')
 
 	const acceptButton = document.createElement('button')
 	acceptButton.type = 'button'
 	acceptButton.textContent = 'Accept'
+	acceptButton.classList.add('accept-button')
 	acceptButton.onclick = () => {
 		colorPicker.remove()
 		optionsDialog.showModal()
 		getTheme(themeName).colors[cssVariableName] = RGBAToHex(HSVAtoRGBA([h, s, v, a]))
-		console.log(h, s, v)
 		localStorage.setItem(`theme.${useDarkTheme ? 'dark' : 'light'}.${themeName}.${cssVariableName}`, RGBAToHex(HSVAtoRGBA([h, s, v, a])))
 		applyCurrentTheme()
+		rootElement.style.setProperty('--compact-ui', '0')
+		optionsMenuOpenButton.toggleAttribute('hidden')
 	}
 
 
@@ -298,15 +360,33 @@ function getTheme(themeName) {
 	}
 }
 
-loadThemes()
-applyCurrentTheme()
 
 function resetTheme(themeToReset) {
 	const theme = getTheme(themeToReset)
 	const fallbackTheme = getTheme(theme.fallback)
 	theme.colors = structuredClone(fallbackTheme.colors)
+
+	Object.keys(localStorage).forEach(key => {
+		const splitkey = key.split('.')
+		if (splitkey.length != 4) return
+		
+		if (!splitkey[0] == 'theme') return
+		
+		const [fallback, themeName, property] = splitkey.slice(1)
+
+		if (themeName != themeToReset) return
+
+		localStorage.removeItem(key)
+	})
 	applyCurrentTheme()
-	console.log(themes)
 }
 
+loadThemeOverride()
+loadCurrentLightAndDarkThemes()
+loadThemes()
+
+createThemeOverrideOptions()
 updateThemeOptionsContainers()
+updatePrefersDark()
+applyCurrentTheme()
+updateCustomizeCurrentTheme()

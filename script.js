@@ -1,12 +1,3 @@
-// "100vh" is the theoretical height with the mobile url bar hidden,
-// "window.innerHeight" is the actual height
-const setBodyHeight = () => document.body.style.height = `${window.innerHeight}px`
-
-setBodyHeight()
-window.onresize = () => {
-	setBodyHeight()
-}
-
 const bellSchedules = [
 	{
 		name: 'regular',
