@@ -7,13 +7,11 @@
 	box-sizing: border-box;
 }
 
-:root {
+:root, ::backdrop {
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
 	font-size: 18px;
-
-	color-scheme: light dark;
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
@@ -21,40 +19,41 @@
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-text-size-adjust: 100%;
 
-	--current-period-border-radius: 1rem;
+	
+	--current-period-border-radius: 0.3rem;
+	--current-period-border-width: 0.15rem;
+	--elapsed-remaining-divider-thickness: 0.1rem;
 	--table-divider-thickness: 0.05rem;
 
 	/* Colors */
-	--background-color: white;
-	--foreground-color: black;
-	--elapsed-remaining-unit-color: #0005;
-	--elapsed-remaining-label-color: #0008;
-	--elapsed-remaining-separator-color: #DDD;
-	--table-divider-color: #BBB;
-	--current-period-table-row-background: hsla(118, 100%, 60%, 0.5);
-	--current-period-table-row-border: hsl(118, 60%, 60%);
-}
+	--background: white;
+	--foreground: black;
+	--elapsed-remaining-units: #0005;
+	--elapsed-remaining-labels: #0008;
+	--elapsed-remaining-separator: #DDD;
+	--period-dividers: #BBB;
+	--current-period-background: hsla(118, 100%, 60%, 0.5);
+	--current-period-border: hsl(118, 60%, 60%);
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--background-color: black;
-		--foreground-color: #DDD;
-		--elapsed-remaining-unit-color: #FFF5;
-		--elapsed-remaining-label-color: #FFF8;
-		--elapsed-remaining-separator-color: #333;
-		--table-divider-color: #555;
-		--current-period-table-row-background: hsla(118, 70%, 60%, 0.5);
-		--current-period-table-row-border: hsl(118, 54%, 43%);
-	}
+	--options-menu-background: var(--background);
+	--button-background: #F4F4F4;
+	--button-border: #CCC;
+	--button-hover-background: var(--button-border);
+	--dialog-backdrop: #0004;
+	--dialog-blur: 1rem
 }
 
 body {
 	display: grid;
 	place-items: center;
 	margin: 0;
-	background-color: var(--background-color);
-	color: var(--foreground-color);
+	background-color: var(--background);
+	color: var(--foreground);
 	height: 100vh;
+}
+
+body > * {
+	max-width: 30rem
 }
 
 main {
@@ -66,7 +65,6 @@ main {
 	align-items: center;
 	height: 100%;
 	width: 100%;
-	max-width: 30rem
 }
 
 #top-section {
@@ -87,9 +85,9 @@ main {
 
 .vertical-separator {
 	display: block;
-	width: 0.1rem;
+	width: var(--elapsed-remaining-divider-thickness);
 	height: 5rem;
-	background-color: var(--elapsed-remaining-separator-color);
+	background-color: var(--elapsed-remaining-separator);
 }
 
 .elapsed-remaining-boxes {
@@ -108,11 +106,11 @@ main {
 .elapsed-remaining-units {
 	font-size: 3rem;
 	line-height: 0.8;
-	color: var(--elapsed-remaining-unit-color);
+	color: var(--elapsed-remaining-units);
 }
 
 .elapsed-remaining-label {
-	color: var(--elapsed-remaining-label-color);
+	color: var(--elapsed-remaining-labels);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -136,7 +134,7 @@ main {
 }
 
 #bell-schedule-table hr {
-	outline: var(--table-divider-thickness) solid var(--table-divider-color);
+	outline: var(--table-divider-thickness) solid var(--period-dividers);
 	border: none;
 	margin: 0;
 }
@@ -154,7 +152,7 @@ main {
 }
 
 #bell-schedule-table > *:not(hr) {
-	padding-block: 0.4rem;
+	padding-block: min(0.4rem, calc(3vh - 1rem));
 }
 
 #bell-schedule-table > * > * {
@@ -163,7 +161,97 @@ main {
 }
 
 #bell-schedule-table .current-period {
-	background-color: var(--current-period-table-row-background);
-	outline: 0.15rem solid var(--current-period-table-row-border);
-	border-radius: 0.3rem;
+	background-color: var(--current-period-background);
+	outline: var(--current-period-border-width) solid var(--current-period-border);
+	border-radius: var(--current-period-border-radius);
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                options menu                                */
+/* -------------------------------------------------------------------------- */
+
+.open-options-menu-button {
+	background-color: transparent;
+	border: none;
+	position: absolute;
+	bottom: 1rem;
+	right: 1rem;
+}
+
+dialog {
+	width: calc(min(100vw, 30rem) - 2rem);
+	border: none;
+	border-radius: 2rem;
+	height: calc(100vh - 2rem);
+	background-color: var(--options-menu-background);
+	color: inherit;
+}
+
+dialog::backdrop {
+	background: var(--dialog-backdrop);
+	backdrop-filter: blur(var(--dialog-blur));
+}
+
+#options-menu > section > div {
+	display: flex;
+	gap: 0.2rem
+}
+
+#options-menu > section > .theme-customization-menu {
+	flex-direction: column;
+}
+
+#options-menu > section > .theme-customization-menu > * {
+	width: fit-content
+}
+
+#options-menu h2 {
+	margin-bottom: 0;
+}
+
+dialog > .close-button {
+	background-color: transparent;
+	border: none;
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+}
+
+button {
+	background-color: var(--button-background);
+	border: 0.1rem solid var(--button-border);
+	border-radius: 0.5rem;
+	padding: 0.4rem;
+	color: inherit;
+}
+
+button:hover {
+	background-color: var(--button-hover-background);
+	cursor: pointer
+}
+
+.color-picker > .range-container {
+	display: grid;
+	grid-template-columns: max-content auto;
+	gap: 0.5rem
+	
+}
+
+.color-picker > * {
+	width: calc(80% + 2rem);
+	margin-inline: auto;
+	display: block
+}
+
+.color-picker input {
+	margin-bottom: 1rem;
+}
+
+.color-picker {
+	width: 100%
+}
+
+.radio-button.active {
+	background-color: var(--current-period-background);
+	border-color: var(--current-period-border);
 }
