@@ -51,26 +51,32 @@
 		</button>
 
 		<dialog id="options-dialog">
-			<button class="close-button" onclick="optionsDialog.close()">
+			<button id="options-menu-close-button" class="close-button" onclick="optionsDialog.close()">
 				<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path fill="currentColor" d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z"/></svg>
 			</button>
 			<div id="options-menu">
-				<section>
-					<h2>Current Theme</h2>
-					<div id="theme-override-container"></div>
-				</section>
-				<section>
-					<h2>Light Theme</h2>
-					<div id="light-theme-options-container"></div>
-				</section>
-				<section>
-					<h2>Dark Theme</h2>
-					<div id="dark-theme-options-container"></div>
-				</section>
-				<section>
-					<h2 id="customize-theme-header"></h2>
-					<div id="theme-customization-menu"></div>
-				</section>
+				<div class="top-section">
+					<section>
+						<h2>Current theme</h2>
+						<div id="theme-override-container"></div>
+					</section>
+					<section>
+						<h2>Light theme</h2>
+						<div id="light-theme-options-container"></div>
+					</section>
+					<section>
+						<h2>Dark theme</h2>
+						<div id="dark-theme-options-container"></div>
+					</section>
+					<section>
+						<h2 id="customize-theme-header">Customize active theme</h2>
+						<div id="theme-customization-menu"></div>
+					</section>
+				</div>
+				<div class="bottom-section">
+					<div>Made by <strong>geode42</strong></div>
+					<a href="https://github.com/geode42/today-at-stuy" target="_blank" rel="noreferrer noopener">GitHub repo</a>
+				</div>
 			</div>
 		</dialog>
 	</main>

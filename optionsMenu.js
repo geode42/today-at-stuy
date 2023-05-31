@@ -7,18 +7,21 @@ const darkThemeOptionsContainer = document.getElementById('dark-theme-options-co
 const themeOverrideContainer = document.getElementById('theme-override-container')
 const themeCustomizationMenu = document.getElementById('theme-customization-menu')
 const optionsMenuOpenButton = document.getElementById('options-menu-open-button')
-const customizeThemeHeader = document.getElementById('customize-theme-header')
+// const customizeThemeHeader = document.getElementById('customize-theme-header')
 
 // optionsDialog.showModal()
 
 const themes = [
 	{
-		'name': 'light',
-		'fallback': 'light',
+		'name': 'default-light',
+		'displayName': 'Default Light',
+		'fallback': 'default-light',
 		'isDarkTheme': false,
 		'colors': {
-			'background': 'FFFFFF',
 			'foreground': '000000',
+			'background': 'FFFFFF',
+			'time-elapsed': '000000',
+			'time-remaining': '000000',
 			'elapsed-remaining-units': '0005',
 			'elapsed-remaining-labels': '0008',
 			'elapsed-remaining-separator': 'DDD',
@@ -30,12 +33,15 @@ const themes = [
 		}
 	},
 	{
-		'name': 'dark',
-		'fallback': 'dark',
+		'name': 'default-dark',
+		'displayName': 'Default Dark',
+		'fallback': 'default-dark',
 		'isDarkTheme': true,
 		'colors': {
-			'background': '000000',
 			'foreground': 'DDD',
+			'background': '111',
+			'time-elapsed': 'DDD',
+			'time-remaining': 'DDD',
 			'elapsed-remaining-units': 'FFF5',
 			'elapsed-remaining-labels': 'FFF8',
 			'elapsed-remaining-separator': '333',
@@ -45,16 +51,52 @@ const themes = [
 			'button-background': '222',
 			'button-border': '444',
 		}
-	}
+	},
+	{
+		'name': 'custom-light',
+		'displayName': 'Custom Light',
+		'fallback': 'default-light',
+		'isDarkTheme': false,
+		'colors': {}
+	},
+	{
+		'name': 'custom-dark',
+		'displayName': 'Custom Dark',
+		'fallback': 'default-dark',
+		'isDarkTheme': true,
+		'colors': {}
+	},
+	{
+		'name': 'oled-dark',
+		'displayName': 'OLED Dark',
+		'fallback': 'default-dark',
+		'isDarkTheme': true,
+		'colors': {
+			'background': '000000'
+		}
+	},
+	{
+		'name': 'monkeytype',
+		'displayName': 'Monkeytype',
+		'fallback': 'default-dark',
+		'isDarkTheme': true,
+		'colors': {
+			'background': '323437',
+			'time-elapsed': 'E2B714',
+			'time-remaining': 'E2B714'
+		}
+	},
 ]
+
+
 // Add base custom themes
-themes.push({name: 'custom-light', fallback: 'light', isDarkTheme: false, colors: structuredClone(getTheme('light').colors)})
-themes.push({name: 'custom-dark', fallback: 'dark', isDarkTheme: true, colors: structuredClone(getTheme('dark').colors)})
+// themes.push({name: 'custom-light', displayName: 'Custom Light', fallback: 'default-light', isDarkTheme: false, colors: structuredClone(getTheme('default-light').colors)})
+// themes.push({name: 'custom-dark', displayName: 'Custom Dark', fallback: 'default-dark', isDarkTheme: true, colors: structuredClone(getTheme('default-dark').colors)})
 
 
 let themeOverride = ''
-let currentLightTheme = 'light'
-let currentDarkTheme = 'dark'
+let currentLightTheme = 'default-light'
+let currentDarkTheme = 'default-dark'
 
 
 function loadThemeOverride() {
@@ -96,19 +138,19 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
 })
 
 function updateCustomizeCurrentTheme() {
-	customizeThemeHeader.textContent = 'Customize __________'
+	// customizeThemeHeader.textContent = 'Customize __________'
 	themeCustomizationMenu.replaceChildren()
 	if (!(useDarkTheme ? currentDarkTheme.includes('custom') : currentLightTheme.includes('custom'))) {
 		themeCustomizationMenu.append(createDiv('The active theme must be a "custom" theme to be customized!'))
 		return
 	}
 
-	customizeThemeHeader.textContent = `Customize ${useDarkTheme ? currentDarkTheme : currentLightTheme}`
+	// customizeThemeHeader.textContent = `Customize ${useDarkTheme ? currentDarkTheme : currentLightTheme}`
 
 	const theme = getTheme(useDarkTheme ? currentDarkTheme : currentLightTheme)
 
 	const resetButton = document.createElement('button')
-	resetButton.textContent = 'Reset to built-in theme'
+	resetButton.textContent = 'Reset to default theme'
 	resetButton.onclick = () => {
 		resetTheme(useDarkTheme ? currentDarkTheme : currentLightTheme)
 	}
@@ -117,7 +159,7 @@ function updateCustomizeCurrentTheme() {
 	const colorContainer = createDiv('', 'color-container')
 	themeCustomizationMenu.append(resetButton, colorContainer)
 
-	for (const color in theme.colors) {
+	for (const color in getTheme(theme.fallback).colors) {
 		const button = document.createElement('button')
 		button.textContent = color
 		button.onclick = () => {letUserChangeCSSVariableColor(useDarkTheme ? currentDarkTheme : currentLightTheme, color)}
@@ -152,8 +194,8 @@ function updateThemeOptionsContainers() {
 	lightThemeOptionsContainer.replaceChildren()
 	darkThemeOptionsContainer.replaceChildren()
 	for (const theme of themes) {		
-		if (theme.fallback == 'light') {
-			const button = createRadioButton('light-theme-option', theme.name, () => {
+		if (!theme.isDarkTheme) {
+			const button = createRadioButton('light-theme-option', theme.displayName, () => {
 				currentLightTheme = theme.name
 				localStorage.setItem('active-light-theme', theme.name)
 				applyCurrentTheme()
@@ -161,7 +203,7 @@ function updateThemeOptionsContainers() {
 			if (useDarkTheme) button.classList.add('slightly-hidden')
 			lightThemeOptionsContainer.append(button)
 		} else {
-			const button = createRadioButton('dark-theme-option', theme.name, () => {
+			const button = createRadioButton('dark-theme-option', theme.displayName, () => {
 				currentDarkTheme = theme.name
 				localStorage.setItem('active-dark-theme', theme.name)
 				applyCurrentTheme()
@@ -278,7 +320,8 @@ function letUserChangeCSSVariableColor(themeName, cssVariableName) {
 		return [label, input]
 	}
 
-	const oldHSVA = RGBAtoHSVA(HexToRGBA(getTheme(useDarkTheme ? 'custom-dark' : 'custom-light').colors[cssVariableName]))
+	// Umm... yeah I have no defense for this
+	const oldHSVA = RGBAtoHSVA(HexToRGBA(getTheme(useDarkTheme ? 'custom-dark' : 'custom-light').colors[cssVariableName] ?? getTheme(getTheme(useDarkTheme ? 'custom-dark' : 'custom-light').fallback).colors[cssVariableName]))
 
 	const [hueLabel, hueInput] = createColorRange('hue', oldHSVA[0] * 100)
 	const [saturationLabel, saturationInput] = createColorRange('saturation', oldHSVA[1] * 100)
@@ -347,7 +390,7 @@ function loadThemes() {
 		
 		const [fallback, themeName, property] = splitkey.slice(1)
 
-		if (!themes.map(i => i.name).includes(themeName)) themes.push({name: themeName, fallback: fallback, colors: {}})
+		if (!themes.map(i => i.name).includes(themeName)) themes.push({name: themeName, fallback: fallback, isDarkTheme: getTheme(fallback).isDarkTheme, colors: {}})
 
 		getTheme(themeName).colors[property] = localStorage.getItem(key)
 	})

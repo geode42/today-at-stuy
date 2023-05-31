@@ -5,6 +5,7 @@
 
 * {
 	box-sizing: border-box;
+	font-family: inherit;
 }
 
 :root, ::backdrop {
@@ -28,8 +29,10 @@
 	--table-divider-thickness: 0.05rem;
 
 	/* Colors */
-	--background: white;
 	--foreground: black;
+	--background: white;
+	--time-elapsed: var(--foreground);
+	--time-remaining: var(--foreground);
 	--elapsed-remaining-units: #0005;
 	--elapsed-remaining-labels: #0008;
 	--elapsed-remaining-separator: #DDD;
@@ -41,7 +44,7 @@
 	--button-background: #F4F4F4;
 	--button-border: #CCC;
 	--button-hover-background: var(--button-border);
-	--dialog-backdrop: #0004;
+	--dialog-backdrop: #6665;
 	--dialog-blur: 1rem
 }
 
@@ -83,6 +86,14 @@ main {
 	display: flex;
 	align-items: center;
 	justify-content: space-evenly;
+}
+
+#time-elapsed {
+	color: var(--time-elapsed)
+}
+
+#time-remaining {
+	color: var(--time-remaining)
 }
 
 .vertical-separator {
@@ -197,15 +208,46 @@ dialog::backdrop {
 
 #options-menu {
 	padding: 1.5rem;
+	display: flex;
+	height: 100%;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
-#options-menu > section {
+#options-menu-open-button {
+	opacity: 0.4
+}
+
+#options-menu-close-button {
+	opacity: 0.8;
+	background-color: transparent;
+	border: none;
+	position: absolute;
+	top: 1.2rem;
+	right: 1.2rem;
+}
+
+#options-menu > .bottom-section {
+	text-align: center;
+	/* Flexbox ftw */
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+}
+
+
+#options-menu section {
 	margin-bottom: 1rem;
 }
 
-#options-menu > section > div {
+#options-menu section > div {
 	display: flex;
 	gap: 0.2rem
+}
+
+#options-menu h2 {
+	margin: 0;
+	font-size: 1.4rem
 }
 
 #theme-customization-menu {
@@ -220,19 +262,6 @@ dialog::backdrop {
 
 #theme-customization-menu .color-container > button {
 	padding-block: 0.5rem
-}
-
-#options-menu h2 {
-	margin: 0;
-	font-size: 1.4rem
-}
-
-dialog > .close-button {
-	background-color: transparent;
-	border: none;
-	position: absolute;
-	top: 1rem;
-	right: 1rem;
 }
 
 button {
@@ -285,4 +314,51 @@ button:hover {
 
 svg {
 	width: 2.5rem
+}
+
+a {
+	color: #1c6ce4;
+	text-decoration: none;
+}
+
+/* Reset styles */
+input[type="range"] {
+	-webkit-appearance: none;
+	-appearance: none;
+	background: transparent;
+	cursor: pointer;
+	width: 100%;
+}
+
+/* Track */
+input[type="range"]::-webkit-slider-runnable-track {
+	background: #8885;
+	height: 0.3rem;
+	border-radius: 999px;
+}
+
+input[type="range"]::-moz-range-track {
+	background: #8885;
+	height: 0.3rem;
+	border-radius: 999px;
+}
+
+/* Thumb */
+input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	--track-height: 0.3rem;
+	--size: 0.9rem;
+	width: var(--size);
+	height: var(--size);
+	margin-top: calc(var(--track-height) / 2 - var(--size) / 2);
+	background: rgb(0, 94, 255);
+	border-radius: 999px;
+}
+
+input[type="range"]::-moz-range-thumb {
+	border: none;
+	border-radius: 999px;
+	background: rgb(0, 94, 255);
+	width: 0.9rem;
+	height: 0.9rem;
 }
