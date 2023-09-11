@@ -8,42 +8,54 @@
 	<link rel="stylesheet" href="style.css">
 	<script src="script.js" defer></script>
 	<script src="optionsMenu.js" defer></script>
-	<link rel="prefetch" href="https://worldtimeapi.org/api/timezone/America/New_York" />
     <link rel="manifest" href="manifest.json" />
+	<meta name="theme-color" id="theme-color-meta-tag" content='#1FA7E0'>
+	<meta name="description" content="An open-source bell schedule tracker for Stuyvesant High School">
+	<meta name="author" content="geode42">
 </head>
 <body>
 	<main>
-		<!-- Top section -->
-		<div id="top-section">
-			<div id="time-elapsed-remaining-container">
-				<div class="elapsed-remaining-boxes">
-					<div>
-						<span id="time-elapsed" class="elapsed-remaining-numbers"></span><span id="time-elapsed-units" class="elapsed-remaining-units"></span>
+		<div id="live-viewer">
+			<div id="top-section">
+				<div id="time-elapsed-remaining-container">
+					<div class="elapsed-remaining-boxes">
+						<div>
+							<span id="time-elapsed" class="elapsed-remaining-numbers"></span><span id="time-elapsed-units" class="elapsed-remaining-units"></span>
+						</div>
+						<div class="elapsed-remaining-label">Elapsed</div>
 					</div>
-					<div class="elapsed-remaining-label">Elapsed</div>
+					<div class="vertical-separator"></div>
+					<div class="elapsed-remaining-boxes">
+						<div>
+							<span id="time-remaining" class="elapsed-remaining-numbers"></span><span id="time-remaining-units" class="elapsed-remaining-units"></span>
+						</div>
+						<div class="elapsed-remaining-label">Remaining</div>
+					</div>
 				</div>
-				<div class="vertical-separator"></div>
-				<div class="elapsed-remaining-boxes">
-					<div>
-						<span id="time-remaining" class="elapsed-remaining-numbers"></span><span id="time-remaining-units" class="elapsed-remaining-units"></span>
+				<div id="bell-schedule-table" class="bell-schedule-table">
+					<div id="bell-schedule-table-header-row" class="bell-schedule-table-header-row">
+						<div>Period</div>
+						<div>Start Time</div>
+						<div>End Time</div>
 					</div>
-					<div class="elapsed-remaining-label">Remaining</div>
 				</div>
 			</div>
-			<div id="bell-schedule-table">
-				<div id="bell-schedule-table-header-row">
-					<div>Period</div>
-					<div>Start Time</div>
-					<div>End Time</div>
-				</div>
-			</div>
+			
+			<div id="a-day-b-day"></div>
 		</div>
-		
-		<!-- Bottom section -->
-		<div>
-			<span id="a-day-b-day-before"></span>
-			<span id="a-day-b-day"></span>
-			<span id="a-day-b-day-after">day</span>
+		<div id="schedule-viewer">
+			<div>
+				<div id="no-school-message">There's no school today!</div>
+				<div id="no-school-reason"></div>
+				<div id="schedule-viewer-table" class="bell-schedule-table">
+					<div id="schedule-viewer-table-header-row" class="bell-schedule-table-header-row">
+						<div>Period</div>
+						<div>Start</div>
+						<div>End</div>
+					</div>
+				</div>
+			</div>
+			<div id="schedule-viewer-radio-button-container"></div>
 		</div>
 
 		<button id="options-menu-open-button" class="open-options-menu-button" onclick="optionsDialog.showModal()">

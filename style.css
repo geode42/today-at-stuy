@@ -72,6 +72,13 @@ main {
 	width: 100%;
 }
 
+#no-school-message {
+	padding-bottom: 2rem;
+	font-weight: 500;
+	text-align: center;
+	font-size: 1.2rem;
+}
+
 #top-section {
 	display: flex;
 	flex-direction: column;
@@ -130,6 +137,10 @@ main {
 /*                             a-day b-day display                            */
 /* -------------------------------------------------------------------------- */
 #a-day-b-day {
+	position: absolute;
+	left: 1rem;
+	bottom: 1rem;
+	font-size: 2.5rem;
 	font-weight: bold;
 }
 
@@ -137,46 +148,104 @@ main {
 /*                             bell schedule table                            */
 /* -------------------------------------------------------------------------- */
 
-#bell-schedule-table {
+.bell-schedule-table {
 	width: calc(80% + 2rem);
 	margin-inline: auto;
 }
 
-#bell-schedule-table-header-row {
+.bell-schedule-table-header-row {
 	font-weight: 700
 }
 
-#bell-schedule-table hr {
+.bell-schedule-table hr {
 	outline: var(--table-divider-thickness) solid var(--period-dividers);
 	border: none;
 	margin: 0;
 }
 
-#bell-schedule-table > .actual-row, #bell-schedule-table > #bell-schedule-table-header-row {
+.bell-schedule-table > .actual-row, .bell-schedule-table > .bell-schedule-table-header-row {
 	display: flex;
 }
 
-#bell-schedule-table > * {
+.bell-schedule-table > * {
 	text-align: center;
 }
 
-#bell-schedule-table > * > *:nth-child(2) {
+.bell-schedule-table > * > *:nth-child(2) {
 	width: 100%;
 }
 
-#bell-schedule-table > *:not(hr) {
+.bell-schedule-table > *:not(hr) {
 	padding-block: calc(min(0.4rem, calc(3vh - 1rem)) * (1 - var(--compact-ui))    +    min(0.4rem, calc(3vh - 1.3rem)) * var(--compact-ui));
 }
 
-#bell-schedule-table > * > * {
+.bell-schedule-table > * > * {
 	width: 9rem;
 	text-align: center;
 }
 
-#bell-schedule-table .current-period {
+.bell-schedule-table .current-period {
 	background-color: var(--current-period-background);
 	outline: var(--current-period-border-width) solid var(--current-period-border);
 	border-radius: var(--current-period-border-radius);
+}
+
+/* #schedule-viewer-table {
+	min-height: 600px;
+} */
+
+#schedule-viewer-table > *:not(hr) {
+	padding-block: calc((3vh - 0.95rem) * (1 - var(--compact-ui))    +    (3vh - 1.25rem) * var(--compact-ui));
+	font-size: 1.1rem;
+}
+
+#schedule-viewer {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+	padding-bottom: 5rem;
+}
+
+#schedule-viewer-radio-button-container {
+	display: flex;
+	/* gap: 0.5rem; */
+	width: calc(85% + 2rem);
+	margin-inline: auto;
+	background: var(--button-background);
+	border: 0.1rem solid var(--button-border);
+	border-radius: calc(0.6rem + 0.1rem);  /* button border-radius + border-radius above */
+}
+
+#schedule-viewer-radio-button-container > button {
+	font-size: 1.0rem;
+	width: 100%;
+	padding-block: 0.9rem;
+	border-radius: 0.2rem;
+	border: none;
+}
+
+/* #schedule-viewer-radio-button-container > button:not(.active) {
+} */
+
+#schedule-viewer-radio-button-container > button.active {
+	background-color: var(--current-period-background);
+	outline: 0.1rem solid var(--current-period-border);
+	z-index: 999;
+}
+
+#schedule-viewer-radio-button-container > button:first-child {
+	border-top-left-radius: 0.6rem;
+	border-bottom-left-radius: 0.6rem;
+}
+
+/* #schedule-viewer-radio-button-container > button:not(:first-child) {
+	border-left-width: 0;
+} */
+
+#schedule-viewer-radio-button-container > button:last-child {
+	border-top-right-radius: 0.6rem;
+	border-bottom-right-radius: 0.6rem;
 }
 
 /* -------------------------------------------------------------------------- */

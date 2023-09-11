@@ -7,6 +7,7 @@ const darkThemeOptionsContainer = document.getElementById('dark-theme-options-co
 const themeOverrideContainer = document.getElementById('theme-override-container')
 const themeCustomizationMenu = document.getElementById('theme-customization-menu')
 const optionsMenuOpenButton = document.getElementById('options-menu-open-button')
+const themeColorMetaTag = document.getElementById('theme-color-meta-tag')
 // const customizeThemeHeader = document.getElementById('customize-theme-header')
 
 // optionsDialog.showModal()
@@ -181,7 +182,7 @@ function createRadioButton(group, text, onclick, active=false) {
 	button.classList.add(group)
 	if (active) button.classList.add('active')
 
-	button.onclick = (e) => {
+	button.onclick = e => {
 		document.querySelectorAll(`.radio-button.${group}`).forEach(e => e.classList.remove('active'))
 		button.classList.add('active')
 		onclick(e)
@@ -279,8 +280,10 @@ function applyCurrentTheme() {
 	for (const variableName in fallback.colors) {
 		if (theme && Object.hasOwn(theme.colors, variableName)) {
 			rootElement.style.setProperty('--' + variableName, '#' + theme.colors[variableName])
+			if (variableName == 'background') themeColorMetaTag.setAttribute('content', '#' + theme.colors[variableName])
 		} else {
 			rootElement.style.setProperty('--' + variableName, '#' + fallback.colors[variableName])
+			if (variableName == 'background') themeColorMetaTag.setAttribute('content', '#' + fallback.colors[variableName])
 		}
 	}
 	currentThemeChange()

@@ -1,86 +1,62 @@
-const bellSchedules = [
-	{
-		name: 'regular',
-		schedule: [
-			{ pd: '1', time: '8:00' },
-			{ pd: 'b2', time: '8:41' },
-			{ pd: '2', time: '8:45' },
-			{ pd: 'b3', time: '9:26' },
-			{ pd: '3', time: '9:31' },
-			{ pd: 'b4', time: '10:15' },
-			{ pd: '4', time: '10:20' },
-			{ pd: 'b5', time: '11:01' },
-			{ pd: '5', time: '11:06' },
-			{ pd: 'b6', time: '11:47' },
-			{ pd: '6', time: '11:52' },
-			{ pd: 'b7', time: '12:33' },
-			{ pd: '7', time: '12:38' },
-			{ pd: 'b8', time: '13:19' },
-			{ pd: '8', time: '13:24' },
-			{ pd: 'b9', time: '14:05' },
-			{ pd: '9', time: '14:09' },
-			{ pd: 'b10', time: '14:50' },
-			{ pd: '10', time: '14:54' },
-			{ pd: 'end', time: '15:35' },
-		],
-	},
-]
+const bellSchedules = {
+	'Regular': [
+		{ pd: '1', start: '8:00', end: '8:41' },
+		{ pd: '2', start: '8:45', end: '9:26' },
+		{ pd: '3', start: '9:31', end: '10:15' },
+		{ pd: '4', start: '10:20', end: '11:01' },
+		{ pd: '5', start: '11:06', end: '11:47' },
+		{ pd: '6', start: '11:52', end: '12:33' },
+		{ pd: '7', start: '12:38', end: '13:19' },
+		{ pd: '8', start: '13:24', end: '14:05' },
+		{ pd: '9', start: '14:09', end: '14:50' },
+		{ pd: '10', start: '14:54', end: '15:35' },
+	],
+	'Conference': [
+		{ pd: '1', start: '8:00', end: '8:37' },
+		{ pd: '2', start: '8:41', end: '9:18' },
+		{ pd: '3', start: '9:22', end: '9:59' },
+		{ pd: '4', start: '10:03', end: '10:40' },
+		{ pd: '5', start: '10:44', end: '11:21' },
+		{ pd: '6', start: '11:25', end: '12:02' },
+		{ pd: '7', start: '12:06', end: '12:43' },
+		{ pd: '8', start: '12:47', end: '13:24' },
+		{ pd: '9', start: '13:28', end: '14:05' },
+		{ pd: '10', start: '14:09', end: '14:46' },
+	],
+	'Homeroom': [
+		{ pd: '1', start: '8:00', end: '8:40' },
+		{ pd: '2', start: '8:45', end: '9:25' },
+		{ pd: '3', start: '9:29', end: '10:09' },
+		{ pd: 'hr', start: '10:13', end: '10:25' },
+		{ pd: '4', start: '10:30', end: '11:10' },
+		{ pd: '5', start: '11:14', end: '11:54' },
+		{ pd: '6', start: '11:58', end: '12:38' },
+		{ pd: '7', start: '12:42', end: '13:22' },
+		{ pd: '8', start: '13:26', end: '14:06' },
+		{ pd: '9', start: '14:10', end: '14:50' },
+		{ pd: '10', start: '14:55', end: '15:35' },
+	],
+}
 
-const optimizedBellSchedules = bellSchedules.map(i => ({ name: i.name, schedule: i.schedule.map(j => ({ pd: j.pd, time: getSecondsFromString(j.time) })) }))
+const optimizedBellSchedules = Object.entries(bellSchedules).map(([name, schedule]) => ({ name: name, schedule: schedule.map(j => ({ pd: j.pd, start: getSecondsFromString(j.start), end: getSecondsFromString(j.end) })) }))
 
-const displayBellSchedule = []
-
-bellSchedules.map(({ name, schedule }) => {
-	const newSchedule = []
-	for (let i = 0; i < schedule.length / 2; i++) {
-		const pd = i + 1
-		const startTimeSplit = schedule[i * 2].time.split(':')
-		let startTime = startTimeSplit[0] + ':' + startTimeSplit[1]
-		if (Number(startTimeSplit[0]) > 12) {
-			startTime = (Number(startTimeSplit[0]) % 12) + ':' + startTimeSplit[1]
-		}
-		const endTimeSplit = schedule[i * 2 + 1].time.split(':')
-		let endTime = endTimeSplit[0] + ':' + endTimeSplit[1]
-		if (Number(endTimeSplit[0]) > 12) {
-			endTime = (Number(endTimeSplit[0]) % 12) + ':' + endTimeSplit[1]
-		}
-		newSchedule.push({
-			pd: pd,
-			startTime: startTime,
-			endTime: endTime,
-		})
-	}
-	displayBellSchedule[name] = newSchedule
-})
-
-const noADayBDayDays = [
-	'May 29',
-	'June 1',
-	'June 8',
-	'June 14',
-	'June 15',
-	'June 16',
-	'June 19',
-	'June 20',
-	'June 21',
-	'June 22',
-	'June 23',
-	'June 27',
-]
-
-// This is an a-day
-const aDayBDayStartDate = 'May 1'
-
-const getByID = (id) => document.getElementById(id)
+const getByID = id => document.getElementById(id)
 const changeTextContent = (element, newText) => { if (element.textContent != newText) element.textContent = newText }
 
-let timeElapsedElement = getByID('time-elapsed'),
-	timeElapsedUnitsElement = getByID('time-elapsed-units'),
-	timeRemainingElement = getByID('time-remaining'),
-	timeRemainingUnitsElement = getByID('time-remaining-units'),
-	ADayBDayBeforeElement = getByID('a-day-b-day-before'),
-	ADayBDayElement = getByID('a-day-b-day'),
-	bellScheduleTable = getByID('bell-schedule-table')
+const liveViewer = getByID('live-viewer'),
+	  scheduleViewer = getByID('schedule-viewer')
+	
+const scheduleViewerTable = getByID('schedule-viewer-table'),
+	  scheduleViewerRadioButtonContainer = getByID('schedule-viewer-radio-button-container')
+
+const timeElapsedElement = getByID('time-elapsed'),
+      timeElapsedUnitsElement = getByID('time-elapsed-units'),
+      timeRemainingElement = getByID('time-remaining'),
+      timeRemainingUnitsElement = getByID('time-remaining-units'),
+      ADayBDayElement = getByID('a-day-b-day'),
+      bellScheduleTable = getByID('bell-schedule-table'),
+	  noSchoolMessageElement = getByID('no-school-message'),
+      noSchoolReasonElement = getByID('no-school-reason')
 
 // EST is -5 hours, EDT is -4 hours
 const secondsOffsetFromUTC = -4 * 60 * 60
@@ -89,16 +65,37 @@ function getSecondsFromString(time) {
 	const [hours, minutes] = time.split(':')
 	return Number(hours) * 3600 + Number(minutes) * 60
 }
-const currentSchedule = 'regular'
-let currentPeriod = ''
+let currentSchedule = 'Regular'
+let scheduleViewerSchedule = 'Regular'
+let currentDayType = 'A'
+let currentPeriod
+let previousPeriod
+let passing = false
+let schoolDay = true
+let noSchoolReason = ''
 
 // The CSLab computers have incorrect unix times, this code figures out how off it is to be able to correct for it
 let unixTimeFixOffset = 0
-async function updateUnixTimeFixOffset() {
-	unixTimeFixOffset = (await (await fetch('https://worldtimeapi.org/api/timezone/America/New_York')).json()).unixtime - Date.now() / 1000
-}
-updateUnixTimeFixOffset()
 
+/**
+ * Gets a response from the todayatstuy API
+ * @returns {Promise<{schoolDay?: boolean, event?: string, dayType?: 'A' | 'B', bellSchedule?: 'Regular' | 'Conference' | 'Homeroom', unixTime?: number}>}
+ */
+async function getTodayAtStuyAPIResponse(unixtime) {
+	return await (await fetch(`https://todayatstuy.com/unstableapi?t=${unixtime}`)).json()
+}
+
+async function updateTodayInfo() {
+	const response = await getTodayAtStuyAPIResponse(Date.now() / 1000)
+	schoolDay = response.schoolDay
+	noSchoolReason = response.event
+	unixTimeFixOffset = response.unixTime - Date.now() / 1000
+	
+	if (schoolDay) {
+		currentDayType = response.dayType
+		currentSchedule = response.bellSchedule
+	}
+}
 
 
 function createDiv(text='', className='') {
@@ -108,60 +105,84 @@ function createDiv(text='', className='') {
 	return div
 }
 
-let previousPeriod // To let the function below know when to update the table
-function updateBellScheduleTable() {
-	if (currentPeriod == previousPeriod) return
+function createRadioButton(group, text, onclick, active=false) {
+	const button = document.createElement('button')
+	button.textContent = text
+	button.classList.add('radio-button')
+	button.classList.add(group)
+	if (active) button.classList.add('active')
 
-	previousPeriod = currentPeriod
-	Array(...bellScheduleTable.children).slice(1).forEach(i => i.remove())
+	button.onclick = (e) => {
+		document.querySelectorAll(`.radio-button.${group}`).forEach(e => e.classList.remove('active'))
+		button.classList.add('active')
+		onclick(e)
+	}
 
-	for (const {pd, startTime, endTime} of displayBellSchedule[currentSchedule]) {
+	return button
+}
+
+for (const schedule in bellSchedules) {
+	scheduleViewerRadioButtonContainer.append(createRadioButton('schedule-viewer-schedule-picker', schedule, () => {scheduleViewerSchedule = schedule; updateBellScheduleTable(scheduleViewerTable, scheduleViewerSchedule, undefined)}, scheduleViewerSchedule == schedule))
+}
+
+let previousTableSchedulePeriod = 'Hi! Thanks for looking through the code, any suggestions are appreciated :)' // To let the function below know when to update the table
+function updateBellScheduleTable(table, currentSchedule, currentPeriod) {
+	if (JSON.stringify([table, currentSchedule, currentPeriod]) == previousTableSchedulePeriod) return
+	previousTableSchedulePeriod = JSON.stringify([table, currentSchedule, currentPeriod])
+
+	Array(...table.children).slice(1).forEach(i => i.remove())
+
+	for (const {pd, start, end} of bellSchedules[currentSchedule]) {
 		const row = createDiv('', 'actual-row')
 
 		// Add cells to row
-		Array(pd, startTime, endTime).forEach(i => row.append(createDiv(i)))
+		const timeTo12HourTime = time => {
+			let [hours, minutes] = time.split(':')
+			if (hours > 12) hours %= 12  // lol, type coercion
+			return `${hours}:${minutes}`
+		}
+		[pd, timeTo12HourTime(start), timeTo12HourTime(end)].forEach(i => row.append(createDiv(i)))
 
 		// Current period coloring
-		if (currentPeriod == String(pd)) {
-			row.classList.add('current-period')
+		if (currentPeriod == pd) {
+			if (passing) table.append(createDiv('In passing', 'current-period'))
+			else row.classList.add('current-period')
 		}
 
 		// Create dividers
-		if (![String(pd), String(pd - 1)].includes(currentPeriod) && String(pd) != currentPeriod.replace('b', '')) {
-			bellScheduleTable.append(document.createElement('hr'))
+		const previousPeriod = Object.values(bellSchedules[currentSchedule])[Object.entries(bellSchedules[currentSchedule]).findIndex(([_, value]) => value.pd == pd) - 1]?.pd
+		if (currentPeriod != pd && (currentPeriod != previousPeriod || currentPeriod == undefined || passing)) {
+			table.append(document.createElement('hr'))
 		}
-
-		// If in passsing
-		if (currentPeriod.startsWith('b') && currentPeriod.substring(1) == String(pd)) {
-			bellScheduleTable.append(createDiv('In passing', 'current-period'))
-		}
-
-		bellScheduleTable.append(row)
+		table.append(row)
 	}
 }
 
+let today = 'not today'
 
-function updateStuff() {
-	let secondsSinceMidnight = (Date.now() / 1000 + unixTimeFixOffset + secondsOffsetFromUTC) % (24 * 60 * 60)
-	const currentBellSchedule = optimizedBellSchedules.find(e => (e.name = currentSchedule)).schedule
-	/* --------------------------- A day B day display -------------------------- */
-	const currentDate = new Date()
-	const startDate = new Date(aDayBDayStartDate + ' ' + currentDate.getFullYear())
-	let daySwaps = 0
-	for (const day of noADayBDayDays) {
-		if (new Date(day + ' ' + currentDate.getFullYear()) < currentDate) {
-			daySwaps++
-		}
+async function updateStuff() {
+	if (today != new Date().getDay()) {
+		await updateTodayInfo()
+		today = new Date().getDay()
 	}
-	daySwaps += Math.floor((currentDate.getTime() - startDate.getTime()) / 1000 / 60 / 60 / 24)
-	const currentADayBDay = daySwaps % 2 == 0 ? 'A' : 'B'
-	changeTextContent(ADayBDayElement, currentADayBDay)
-	changeTextContent(ADayBDayBeforeElement, `Today ${secondsSinceMidnight < currentBellSchedule[0].time
-		? 'will be'
-		: secondsSinceMidnight > currentBellSchedule.at(-1).time
-			? 'was'
-			: 'is'
-		} ${currentADayBDay.toLowerCase().startsWith('a') ? 'an' : 'a'}`)
+
+	const secondsSinceMidnight = (Date.now() / 1000 + unixTimeFixOffset + secondsOffsetFromUTC) % (24 * 60 * 60)
+	const currentBellSchedule = optimizedBellSchedules.find(e => (e.name = currentSchedule)).schedule
+	/* ---------------------------- No school dialog ---------------------------- */
+	if (!schoolDay) {
+		liveViewer.style.display = 'none'
+		scheduleViewer.style.display = null
+		updateBellScheduleTable(scheduleViewerTable, scheduleViewerSchedule, undefined)
+		changeTextContent(noSchoolMessageElement, [0, 6].includes(today) ? "Enjoy your weekend!" : "There's no school today!")
+		changeTextContent(noSchoolReasonElement, noSchoolReason)
+		return
+	}
+	liveViewer.style.display = null
+	scheduleViewer.style.display = 'none'
+
+
+	/* --------------------------- A day B day display -------------------------- */
+	changeTextContent(ADayBDayElement, currentDayType)
 
 	/* ------------ Time elapsed & remaining + current period display ----------- */
 
@@ -200,54 +221,58 @@ function updateStuff() {
 		return [remainingText, remainingUnits]
 	}
 
-	let foundPeriod = false
-	for (let i = currentBellSchedule.length - 1; i >= 0; i--) {
-		const period = currentBellSchedule[i].pd
+	previousPeriod = undefined
+	currentPeriod = undefined
+	for (let i = 0; i < currentBellSchedule.length; i++) {
+		const previousInfo = currentBellSchedule[i - 1]
+		const info = currentBellSchedule[i]
 
-		const time = currentBellSchedule[i].time
+		if (info.start <= secondsSinceMidnight && secondsSinceMidnight < info.end) {
+			currentPeriod = info
+			previousPeriod = previousInfo
+			passing = false
+			break
+		}
 
-		if (secondsSinceMidnight >= time) {
-			foundPeriod = true
-			const secondsElapsed = secondsSinceMidnight - time
+		if (!previousInfo || (previousInfo.end <= secondsSinceMidnight && secondsSinceMidnight < info.start)) {
+			currentPeriod = info
+			previousPeriod = previousInfo
+			passing = true
+			break
+		}
+
+	}
+	if (currentPeriod) {
+		if (passing) {
+			if (!previousPeriod) {
+				changeTextContent(timeElapsedElement, '-')
+				changeTextContent(timeElapsedUnitsElement, '')
+			} else {
+				const secondsElapsed = secondsSinceMidnight - previousPeriod?.end || 0
+				const textAndUnits = getElapsedTextFromSecondsElapsed(secondsElapsed)
+				changeTextContent(timeElapsedElement, textAndUnits[0])
+				changeTextContent(timeElapsedUnitsElement, textAndUnits[1])
+			}
+		
+			const secondsRemaining = currentPeriod.start - secondsSinceMidnight
+			const remainingTextAndUnits = getRemainingTextFromSecondsRemaining(secondsRemaining)
+			changeTextContent(timeRemainingElement, remainingTextAndUnits[0])
+			changeTextContent(timeRemainingUnitsElement, remainingTextAndUnits[1])
+		} else {
+			const secondsElapsed = secondsSinceMidnight - currentPeriod.start
 			const textAndUnits = getElapsedTextFromSecondsElapsed(secondsElapsed)
 			changeTextContent(timeElapsedElement, textAndUnits[0])
 			changeTextContent(timeElapsedUnitsElement, textAndUnits[1])
-
-			// If last period
-			if (i == currentBellSchedule.length - 1) {
-				const nextPeriodStartTime = currentBellSchedule[0].time
-				const secondsToMidnight = 24 * 60 * 60 - secondsSinceMidnight
-				const secondsRemaining = secondsToMidnight + nextPeriodStartTime
-				const remainingTextAndUnits = getRemainingTextFromSecondsRemaining(secondsRemaining)
-				changeTextContent(timeRemainingElement, remainingTextAndUnits[0])
-				changeTextContent(timeRemainingUnitsElement, remainingTextAndUnits[1])
-			} else {
-				const nextPeriodStartTime = currentBellSchedule[i + 1].time
-				const secondsRemaining = nextPeriodStartTime - secondsSinceMidnight
-				const remainingTextAndUnits = getRemainingTextFromSecondsRemaining(secondsRemaining)
-				changeTextContent(timeRemainingElement, remainingTextAndUnits[0])
-				changeTextContent(timeRemainingUnitsElement, remainingTextAndUnits[1])
-			}
-
-			currentPeriod = period
-			break
+		
+			const secondsRemaining = currentPeriod.end - secondsSinceMidnight
+			const remainingTextAndUnits = getRemainingTextFromSecondsRemaining(secondsRemaining)
+			changeTextContent(timeRemainingElement, remainingTextAndUnits[0])
+			changeTextContent(timeRemainingUnitsElement, remainingTextAndUnits[1])
 		}
 	}
-	if (!foundPeriod) {
-		const secondsElapsed = 24 * 60 * 60 - currentBellSchedule.at(-1).time + secondsSinceMidnight
-		const textAndUnits = getElapsedTextFromSecondsElapsed(secondsElapsed)
-		changeTextContent(timeElapsedElement, textAndUnits[0])
-		changeTextContent(timeElapsedUnitsElement, textAndUnits[1])
 
-		const nextPeriodStartTime = currentBellSchedule[0].time
-		const secondsRemaining = nextPeriodStartTime - secondsSinceMidnight
-		const remainingTextAndUnits = getRemainingTextFromSecondsRemaining(secondsRemaining)
-		changeTextContent(timeRemainingElement, remainingTextAndUnits[0])
-		changeTextContent(timeRemainingUnitsElement, remainingTextAndUnits[1])
-		currentPeriod = ''
-	}
 
-	updateBellScheduleTable()
+	updateBellScheduleTable(bellScheduleTable, currentSchedule, currentPeriod)
 }
 
 updateStuff()
