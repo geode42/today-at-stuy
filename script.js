@@ -234,7 +234,7 @@ async function updateStuff() {
 			break
 		}
 
-		if (!previousInfo || (previousInfo.end <= secondsSinceMidnight && secondsSinceMidnight < info.start)) {
+		if ((previousInfo?.end <= secondsSinceMidnight) && secondsSinceMidnight < info.start) {
 			currentPeriod = info
 			previousPeriod = previousInfo
 			passing = true
@@ -244,15 +244,10 @@ async function updateStuff() {
 	}
 	if (currentPeriod) {
 		if (passing) {
-			if (!previousPeriod) {
-				changeTextContent(timeElapsedElement, '-')
-				changeTextContent(timeElapsedUnitsElement, '')
-			} else {
-				const secondsElapsed = secondsSinceMidnight - previousPeriod?.end || 0
-				const textAndUnits = getElapsedTextFromSecondsElapsed(secondsElapsed)
-				changeTextContent(timeElapsedElement, textAndUnits[0])
-				changeTextContent(timeElapsedUnitsElement, textAndUnits[1])
-			}
+			const secondsElapsed = secondsSinceMidnight - previousPeriod?.end || 0
+			const textAndUnits = getElapsedTextFromSecondsElapsed(secondsElapsed)
+			changeTextContent(timeElapsedElement, textAndUnits[0])
+			changeTextContent(timeElapsedUnitsElement, textAndUnits[1])
 		
 			const secondsRemaining = currentPeriod.start - secondsSinceMidnight
 			const remainingTextAndUnits = getRemainingTextFromSecondsRemaining(secondsRemaining)
@@ -269,10 +264,34 @@ async function updateStuff() {
 			changeTextContent(timeRemainingElement, remainingTextAndUnits[0])
 			changeTextContent(timeRemainingUnitsElement, remainingTextAndUnits[1])
 		}
+
+		updateBellScheduleTable(bellScheduleTable, currentSchedule, currentPeriod?.pd)
+
+		liveViewer.style.display = null
+		scheduleViewer.style.display = 'none'
+	} else {
+		const secondsRemaining = currentBellSchedule[0].start - secondsSinceMidnight
+
+		if (secondsRemaining >= 0) {
+			changeTextContent(timeElapsedElement, '-')
+			changeTextContent(timeElapsedUnitsElement, '')
+			const remainingTextAndUnits = getRemainingTextFromSecondsRemaining(secondsRemaining)
+			changeTextContent(timeRemainingElement, remainingTextAndUnits[0])
+			changeTextContent(timeRemainingUnitsElement, remainingTextAndUnits[1])
+	
+			updateBellScheduleTable(bellScheduleTable, currentSchedule, undefined)
+
+			liveViewer.style.display = null
+			scheduleViewer.style.display = 'none'
+		} else {
+			liveViewer.style.display = 'none'
+			scheduleViewer.style.display = null
+			updateBellScheduleTable(scheduleViewerTable, scheduleViewerSchedule, undefined)
+			changeTextContent(noSchoolMessageElement, "Enjoy the rest of your day!")
+		}
+
+
 	}
-
-
-	updateBellScheduleTable(bellScheduleTable, currentSchedule, currentPeriod)
 }
 
 updateStuff()
