@@ -43,12 +43,6 @@ const optimizedBellSchedules = Object.entries(bellSchedules).map(([name, schedul
 const getByID = id => document.getElementById(id)
 const changeTextContent = (element, newText) => { if (element.textContent != newText) element.textContent = newText }
 
-const liveViewer = getByID('live-viewer'),
-	  scheduleViewer = getByID('schedule-viewer')
-	
-const scheduleViewerTable = getByID('schedule-viewer-table'),
-	  scheduleViewerRadioButtonContainer = getByID('schedule-viewer-radio-button-container')
-
 const timeElapsedElement = getByID('time-elapsed'),
       timeElapsedUnitsElement = getByID('time-elapsed-units'),
       timeRemainingElement = getByID('time-remaining'),
@@ -56,7 +50,10 @@ const timeElapsedElement = getByID('time-elapsed'),
       ADayBDayElement = getByID('a-day-b-day'),
       bellScheduleTable = getByID('bell-schedule-table'),
 	  noSchoolMessageElement = getByID('no-school-message'),
-      noSchoolReasonElement = getByID('no-school-reason')
+      noSchoolReasonElement = getByID('no-school-reason'),
+	  scheduleNameDisplay = getByID('schedule-name-display'),
+	  noSchoolInfoContainer = getByID('no-school-info-container'),
+	  timeElapsedRemainingContainer = getByID('time-elapsed-remaining-container')
 
 // EST is -5 hours, EDT is -4 hours
 const secondsOffsetFromUTC = -4 * 60 * 60
@@ -105,34 +102,32 @@ function createDiv(text='', className='') {
 	return div
 }
 
-function createRadioButton(group, text, onclick, active=false) {
-	const button = document.createElement('button')
-	button.textContent = text
-	button.classList.add('radio-button')
-	button.classList.add(group)
-	if (active) button.classList.add('active')
-
-	button.onclick = (e) => {
-		document.querySelectorAll(`.radio-button.${group}`).forEach(e => e.classList.remove('active'))
-		button.classList.add('active')
-		onclick(e)
-	}
-
-	return button
-}
-
-for (const schedule in bellSchedules) {
-	scheduleViewerRadioButtonContainer.append(createRadioButton('schedule-viewer-schedule-picker', schedule, () => {scheduleViewerSchedule = schedule; updateBellScheduleTable(scheduleViewerTable, scheduleViewerSchedule, undefined)}, scheduleViewerSchedule == schedule))
-}
-
 let previousTableSchedulePeriod = 'Hi! Thanks for looking through the code, any suggestions are appreciated :)' // To let the function below know when to update the table
-function updateBellScheduleTable(table, currentSchedule, currentPeriod) {
-	if (JSON.stringify([table, currentSchedule, currentPeriod]) == previousTableSchedulePeriod) return
-	previousTableSchedulePeriod = JSON.stringify([table, currentSchedule, currentPeriod])
+const currentPeriodRect = createDiv('', 'current-period-rect')
 
-	Array(...table.children).slice(1).forEach(i => i.remove())
+let displayCurrentSchedule = currentSchedule
 
-	for (const {pd, start, end} of bellSchedules[currentSchedule]) {
+scheduleNameDisplay.onclick = e => {
+	displayCurrentSchedule = Object.keys(bellSchedules).find((_, index) => Object.keys(bellSchedules)[--index] == displayCurrentSchedule) || Object.keys(bellSchedules)[0]
+	updateBellScheduleTable()
+}
+
+let resizeTableTimeout
+addEventListener('resize', () => {
+	clearTimeout(resizeTableTimeout)
+	resizeTableTimeout = setTimeout(() => {updateBellScheduleTable()}, 10)
+})
+
+async function updateBellScheduleTable() {
+	let innerCurrentPeriod = displayCurrentSchedule == currentSchedule ? currentPeriod?.pd : undefined
+	if (JSON.stringify([bellScheduleTable, displayCurrentSchedule, innerCurrentPeriod, passing, window.innerWidth]) == previousTableSchedulePeriod) return
+	previousTableSchedulePeriod = JSON.stringify([bellScheduleTable, displayCurrentSchedule, innerCurrentPeriod, passing, window.innerWidth])
+
+	changeTextContent(scheduleNameDisplay, displayCurrentSchedule)
+
+	Array(...bellScheduleTable.children).slice(1).forEach(i => i.remove())
+
+	for (const {pd, start, end} of bellSchedules[displayCurrentSchedule]) {
 		const row = createDiv('', 'actual-row')
 
 		// Add cells to row
@@ -144,18 +139,37 @@ function updateBellScheduleTable(table, currentSchedule, currentPeriod) {
 		[pd, timeTo12HourTime(start), timeTo12HourTime(end)].forEach(i => row.append(createDiv(i)))
 
 		// Current period coloring
-		if (currentPeriod == pd) {
-			if (passing) table.append(createDiv('In passing', 'current-period'))
-			else row.classList.add('current-period')
+		if (innerCurrentPeriod == pd) {
+			setTimeout(() => {
+				currentPeriodRect.style.display = null
+				const rowOffset = row.getBoundingClientRect()
+				if (passing) {
+					const height = rowOffset.height - 30
+					currentPeriodRect.classList.add('passing')
+					currentPeriodRect.style.top = `${rowOffset.y - height / 2}px`
+					currentPeriodRect.style.left = `${rowOffset.x}px`
+					currentPeriodRect.style.width = `${rowOffset.width}px`
+					currentPeriodRect.style.height = `${height}px`
+				} else {
+					currentPeriodRect.classList.remove('passing')
+					currentPeriodRect.style.top = `${rowOffset.y}px`
+					currentPeriodRect.style.left = `${rowOffset.x}px`
+					currentPeriodRect.style.width = `${rowOffset.width}px`
+					currentPeriodRect.style.height = `${rowOffset.height}px`
+				}
+			}, 0);
+		} else {
+			currentPeriodRect.style.display = 'none'
 		}
 
 		// Create dividers
-		const previousPeriod = Object.values(bellSchedules[currentSchedule])[Object.entries(bellSchedules[currentSchedule]).findIndex(([_, value]) => value.pd == pd) - 1]?.pd
-		if (currentPeriod != pd && (currentPeriod != previousPeriod || currentPeriod == undefined || passing)) {
-			table.append(document.createElement('hr'))
-		}
-		table.append(row)
+		bellScheduleTable.append(document.createElement('hr'))
+		
+		bellScheduleTable.append(row)
 	}
+
+	bellScheduleTable.append(currentPeriodRect)
+
 }
 
 let today = 'not today'
@@ -170,16 +184,15 @@ async function updateStuff() {
 	const currentBellSchedule = optimizedBellSchedules.find(e => (e.name = currentSchedule)).schedule
 	/* ---------------------------- No school dialog ---------------------------- */
 	if (!schoolDay) {
-		liveViewer.style.display = 'none'
-		scheduleViewer.style.display = null
-		updateBellScheduleTable(scheduleViewerTable, scheduleViewerSchedule, undefined)
+		noSchoolInfoContainer.style.display = null
+		timeElapsedRemainingContainer.style.display = 'none'
 		changeTextContent(noSchoolMessageElement, [0, 6].includes(today) ? "Enjoy your weekend!" : "There's no school today!")
 		changeTextContent(noSchoolReasonElement, noSchoolReason)
+		updateBellScheduleTable()
 		return
 	}
-	liveViewer.style.display = null
-	scheduleViewer.style.display = 'none'
-
+	noSchoolInfoContainer.style.display = 'none'
+	timeElapsedRemainingContainer.style.display = null
 
 	/* --------------------------- A day B day display -------------------------- */
 	changeTextContent(ADayBDayElement, currentDayType)
@@ -265,10 +278,7 @@ async function updateStuff() {
 			changeTextContent(timeRemainingUnitsElement, remainingTextAndUnits[1])
 		}
 
-		updateBellScheduleTable(bellScheduleTable, currentSchedule, currentPeriod?.pd)
-
-		liveViewer.style.display = null
-		scheduleViewer.style.display = 'none'
+		updateBellScheduleTable()
 	} else {
 		const secondsRemaining = currentBellSchedule[0].start - secondsSinceMidnight
 
@@ -279,18 +289,13 @@ async function updateStuff() {
 			changeTextContent(timeRemainingElement, remainingTextAndUnits[0])
 			changeTextContent(timeRemainingUnitsElement, remainingTextAndUnits[1])
 	
-			updateBellScheduleTable(bellScheduleTable, currentSchedule, undefined)
-
-			liveViewer.style.display = null
-			scheduleViewer.style.display = 'none'
+			updateBellScheduleTable()
 		} else {
-			liveViewer.style.display = 'none'
-			scheduleViewer.style.display = null
-			updateBellScheduleTable(scheduleViewerTable, scheduleViewerSchedule, undefined)
+			noSchoolInfoContainer.style.display = null
+			timeElapsedRemainingContainer.style.display = 'none'
+			updateBellScheduleTable()
 			changeTextContent(noSchoolMessageElement, "Enjoy the rest of your day!")
 		}
-
-
 	}
 }
 

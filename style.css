@@ -38,6 +38,7 @@
 	--elapsed-remaining-separator: #DDD;
 	--period-dividers: #BBB;
 	--current-period-background: hsla(118, 100%, 60%, 0.5);
+	--current-period-stripe-background2: hsla(118, 77%, 50%, 0.5);
 	--current-period-border: hsl(118, 60%, 60%);
 
 	--options-menu-background: var(--background);
@@ -73,7 +74,6 @@ main {
 }
 
 #no-school-message {
-	padding-bottom: 2rem;
 	font-weight: 500;
 	text-align: center;
 	font-size: 1.2rem;
@@ -84,6 +84,16 @@ main {
 	flex-direction: column;
 	gap: calc(2.5rem * (1 - var(--compact-ui)) + 0.5rem * var(--compact-ui));
 	width: 100%;
+}
+
+#schedule-name-display {
+	position: absolute;
+	text-align: center;
+	bottom: 2rem;
+	left: 50%;
+	translate: -50%;
+	cursor: pointer;
+	user-select: none;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -184,10 +194,74 @@ main {
 	text-align: center;
 }
 
-.bell-schedule-table .current-period {
+.current-period-rect {
 	background-color: var(--current-period-background);
+	position: absolute;
 	outline: var(--current-period-border-width) solid var(--current-period-border);
 	border-radius: var(--current-period-border-radius);
+	z-index: -1;
+	transition: all 300ms ease-in-out;
+}
+
+.current-period-rect.passing {
+	padding-block: 0
+}
+
+.current-period-rect.passing::before {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: absolute;
+	background: var(--background);
+	z-index: -10;
+	overflow: hidden;
+}
+
+@keyframes barberpole {
+	from {
+		background-position: 100% 100%;
+	}
+	/* from {
+		translate: 0
+	}
+
+	to {
+		translate: 40px
+	} */
+}
+
+.current-period-rect.passing::after {
+	position: absolute;
+	content: "";
+	display: block;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	/* background-color: var(--current-period-background); */
+	background-image: repeating-linear-gradient(-45deg, var(--current-period-background), var(--current-period-background) 10px, var(--current-period-stripe-background2) 10px, var(--current-period-stripe-background2) 20px);
+	z-index: -10;
+	background-size: 200% 200%;
+	animation: barberpole 10s linear infinite;
+}
+
+/* #current-period-rect::before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	translate: -50% -50%;
+	width: 200%;
+	height: 200%;
+	background: var(--background);
+} */
+
+hr {
+	position: relative;
+	z-index: -20;
 }
 
 /* #schedule-viewer-table {
