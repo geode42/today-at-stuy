@@ -59,8 +59,7 @@ body {
 }
 
 main {
-	/* padding-top: 2rem; */
-	/* padding-bottom: 1rem; */
+	padding-bottom: 1rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -71,9 +70,9 @@ main {
 	max-height: 50rem;
 }
 
-/* button {
+button {
 	-webkit-tap-highlight-color: transparent;
-} */
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                 top section                                */
@@ -112,8 +111,8 @@ main {
 }
 
 #a-day-b-day {
-	font-size: 2.5rem;
-	font-weight: bold;
+	font-size: 2.4rem;
+	font-weight: 600;
 }
 
 #schedule-name-display {
