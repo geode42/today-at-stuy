@@ -1,6 +1,7 @@
 @font-face {
 	font-family: Inter;
-	src: url('./Inter.var.woff2');
+	src: url('InterVariable.woff2');
+	font-display: swap;
 }
 
 *, *:before, *:after {
