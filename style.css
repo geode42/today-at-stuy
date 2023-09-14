@@ -3,7 +3,7 @@
 	src: url('./Inter.var.woff2');
 }
 
-* {
+*, *:before, *:after {
 	box-sizing: border-box;
 	font-family: inherit;
 }
@@ -58,18 +58,35 @@ body {
 	height: 100svh;
 }
 
-body > * {
-	max-width: 30rem
-}
-
 main {
-	padding-top: 2rem;
-	padding-bottom: 1rem;
+	/* padding-top: 2rem; */
+	/* padding-bottom: 1rem; */
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
 	height: 100%;
+	width: 100%;
+	max-width: 30rem;
+	max-height: 50rem;
+}
+
+/* button {
+	-webkit-tap-highlight-color: transparent;
+} */
+
+/* -------------------------------------------------------------------------- */
+/*                                 top section                                */
+/* -------------------------------------------------------------------------- */
+#top-section {
+	height: 10rem;
+	display: grid;
+	place-items: center;
+	width: 100%;
+	flex-shrink: 0;
+}
+
+#top-section > * {
 	width: 100%;
 }
 
@@ -79,21 +96,36 @@ main {
 	font-size: 1.2rem;
 }
 
-#top-section {
+/* -------------------------------------------------------------------------- */
+/*                               Bottom Section                               */
+/* -------------------------------------------------------------------------- */
+#bottom-section {
 	display: flex;
-	flex-direction: column;
-	gap: calc(2.5rem * (1 - var(--compact-ui)) + 0.5rem * var(--compact-ui));
-	width: 100%;
+	width: calc(80% + 2rem);
+	margin-inline: auto;
+	margin-top: 2rem;
+}
+
+#bottom-section > * {
+	display: grid;
+	place-items: center;
+}
+
+#a-day-b-day {
+	font-size: 2.5rem;
+	font-weight: bold;
 }
 
 #schedule-name-display {
-	position: absolute;
-	text-align: center;
-	bottom: 2rem;
-	left: 50%;
-	translate: -50%;
-	cursor: pointer;
-	user-select: none;
+	width: 100%;
+	background: transparent;
+	border: none;
+	font-size: 1rem;
+}
+
+.open-options-menu-button {
+	background-color: transparent;
+	border: none;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -102,7 +134,6 @@ main {
 #time-elapsed-remaining-container {
 	display: flex;
 	align-items: center;
-	justify-content: space-evenly;
 }
 
 #time-elapsed {
@@ -121,7 +152,7 @@ main {
 }
 
 .elapsed-remaining-boxes {
-	width: 9rem;
+	width: 100%;
 	display: flex;
 	place-items: center;
 	flex-direction: column;
@@ -144,52 +175,39 @@ main {
 }
 
 /* -------------------------------------------------------------------------- */
-/*                             a-day b-day display                            */
-/* -------------------------------------------------------------------------- */
-#a-day-b-day {
-	position: absolute;
-	left: 1rem;
-	bottom: 1rem;
-	font-size: 2.5rem;
-	font-weight: bold;
-}
-
-/* -------------------------------------------------------------------------- */
 /*                             bell schedule table                            */
 /* -------------------------------------------------------------------------- */
 
-.bell-schedule-table {
+#bell-schedule-table {
 	width: calc(80% + 2rem);
 	margin-inline: auto;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
-.bell-schedule-table-header-row {
+#bell-schedule-table-header-row {
 	font-weight: 700
 }
 
-.bell-schedule-table hr {
+#bell-schedule-table hr {
 	outline: var(--table-divider-thickness) solid var(--period-dividers);
 	border: none;
 	margin: 0;
+	z-index: -20;
 }
 
-.bell-schedule-table > .actual-row, .bell-schedule-table > .bell-schedule-table-header-row {
+#bell-schedule-table > .actual-row, #bell-schedule-table > #bell-schedule-table-header-row {
 	display: flex;
+	align-items: center;
+	flex-grow: 1;
 }
 
-.bell-schedule-table > * {
-	text-align: center;
+#bell-schedule-table > * > *:nth-child(2) {
+	width: 100%;  /* Make the center column as wide as possible to move side columns outward */
 }
 
-.bell-schedule-table > * > *:nth-child(2) {
-	width: 100%;
-}
-
-.bell-schedule-table > *:not(hr) {
-	padding-block: calc(min(0.4rem, calc(3vh - 1rem)) * (1 - var(--compact-ui))    +    min(0.4rem, calc(3vh - 1.3rem)) * var(--compact-ui));
-}
-
-.bell-schedule-table > * > * {
+#bell-schedule-table > * > * {
 	width: 9rem;
 	text-align: center;
 }
@@ -204,33 +222,14 @@ main {
 }
 
 .current-period-rect.passing {
-	padding-block: 0
-}
-
-.current-period-rect.passing::before {
-	content: "";
-	display: block;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	position: absolute;
+	padding-block: 0;
 	background: var(--background);
-	z-index: -10;
-	overflow: hidden;
 }
 
 @keyframes barberpole {
 	from {
 		background-position: 100% 100%;
 	}
-	/* from {
-		translate: 0
-	}
-
-	to {
-		translate: 40px
-	} */
 }
 
 .current-period-rect.passing::after {
@@ -241,98 +240,15 @@ main {
 	height: 100%;
 	top: 0;
 	left: 0;
-	/* background-color: var(--current-period-background); */
 	background-image: repeating-linear-gradient(-45deg, var(--current-period-background), var(--current-period-background) 10px, var(--current-period-stripe-background2) 10px, var(--current-period-stripe-background2) 20px);
 	z-index: -10;
 	background-size: 200% 200%;
 	animation: barberpole 10s linear infinite;
 }
 
-/* #current-period-rect::before {
-	content: "";
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	translate: -50% -50%;
-	width: 200%;
-	height: 200%;
-	background: var(--background);
-} */
-
-hr {
-	position: relative;
-	z-index: -20;
-}
-
-/* #schedule-viewer-table {
-	min-height: 600px;
-} */
-
-#schedule-viewer-table > *:not(hr) {
-	padding-block: calc((3vh - 0.95rem) * (1 - var(--compact-ui))    +    (3vh - 1.25rem) * var(--compact-ui));
-	font-size: 1.1rem;
-}
-
-#schedule-viewer {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	height: 100%;
-	padding-bottom: 5rem;
-}
-
-#schedule-viewer-radio-button-container {
-	display: flex;
-	/* gap: 0.5rem; */
-	width: calc(85% + 2rem);
-	margin-inline: auto;
-	background: var(--button-background);
-	border: 0.1rem solid var(--button-border);
-	border-radius: calc(0.6rem + 0.1rem);  /* button border-radius + border-radius above */
-}
-
-#schedule-viewer-radio-button-container > button {
-	font-size: 1.0rem;
-	width: 100%;
-	padding-block: 0.9rem;
-	border-radius: 0.2rem;
-	border: none;
-}
-
-/* #schedule-viewer-radio-button-container > button:not(.active) {
-} */
-
-#schedule-viewer-radio-button-container > button.active {
-	background-color: var(--current-period-background);
-	outline: 0.1rem solid var(--current-period-border);
-	z-index: 999;
-}
-
-#schedule-viewer-radio-button-container > button:first-child {
-	border-top-left-radius: 0.6rem;
-	border-bottom-left-radius: 0.6rem;
-}
-
-/* #schedule-viewer-radio-button-container > button:not(:first-child) {
-	border-left-width: 0;
-} */
-
-#schedule-viewer-radio-button-container > button:last-child {
-	border-top-right-radius: 0.6rem;
-	border-bottom-right-radius: 0.6rem;
-}
-
 /* -------------------------------------------------------------------------- */
 /*                                options menu                                */
 /* -------------------------------------------------------------------------- */
-
-.open-options-menu-button {
-	background-color: transparent;
-	border: none;
-	position: absolute;
-	bottom: 1rem;
-	right: 1rem;
-}
 
 dialog {
 	width: calc(min(100vw, 30rem) - 2rem);
@@ -368,6 +284,10 @@ dialog::backdrop {
 	position: absolute;
 	top: 1.2rem;
 	right: 1.2rem;
+}
+
+#options-menu-close-button:hover {
+	background: var(--button-hover-background)
 }
 
 #options-menu > .bottom-section {

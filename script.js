@@ -107,7 +107,7 @@ const currentPeriodRect = createDiv('', 'current-period-rect')
 
 let displayCurrentSchedule = currentSchedule
 
-scheduleNameDisplay.onclick = e => {
+scheduleNameDisplay.onclick = () => {
 	displayCurrentSchedule = Object.keys(bellSchedules).find((_, index) => Object.keys(bellSchedules)[--index] == displayCurrentSchedule) || Object.keys(bellSchedules)[0]
 	updateBellScheduleTable()
 }
@@ -144,7 +144,7 @@ async function updateBellScheduleTable() {
 				currentPeriodRect.style.display = null
 				const rowOffset = row.getBoundingClientRect()
 				if (passing) {
-					const height = rowOffset.height - 30
+					const height = 10
 					currentPeriodRect.classList.add('passing')
 					currentPeriodRect.style.top = `${rowOffset.y - height / 2}px`
 					currentPeriodRect.style.left = `${rowOffset.x}px`
