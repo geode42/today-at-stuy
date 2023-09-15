@@ -74,19 +74,35 @@ let noSchoolReason = ''
 // The CSLab computers have incorrect unix times, this code figures out how off it is to be able to correct for it
 let unixTimeFixOffset = 0
 
-/**
- * Gets a response from the todayatstuy API
- * @returns {Promise<{schoolDay?: boolean, event?: string, dayType?: 'A' | 'B', bellSchedule?: 'Regular' | 'Conference' | 'Homeroom', unixTime?: number}>}
- */
-async function getTodayAtStuyAPIResponse(unixtime) {
-	return await (await fetch(`https://todayatstuy.com/unstableapi?t=${unixtime}`)).json()
+function updateTodayInfo() {
+	const today = new Date(Date.now() + secondsOffsetFromUTC * 1000)
+	
+	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+	const humanDateFormat = `${months[today.getMonth()]} ${today.getDate()} ${today.getFullYear()}`
+
+	schoolDay = (!Object.hasOwn(noSchoolDays, humanDateFormat)) && ![0, 6].includes(today.getDay())
+
+	noSchoolReason = noSchoolDays[humanDateFormat] || ''
+
+	if (schoolDay) {
+		currentSchedule = irregularBellScheduleDays[humanDateFormat] || 'Regular'
+		currentDayType = getADayBDay(today)
+	}
 }
 
-async function updateTodayInfo() {
-	const response = await getTodayAtStuyAPIResponse(Date.now() / 1000)
+
+async function updateTodayInfoFromAPI() {
+	const t1 = Date.now()
+	const response = await (await fetch(`https://todayatstuy.com/unstableapi?t=${Date.now() / 1000}`)).json()
+	const t2 = Date.now()
+	const responseDuration = (t2 - t1) / 1000
+
+	// I'm guessing that most of the time goes to getting to the server and back, and that both times are equal
+	// This reminds me of that one Veritasium video about the speed of light
+	unixTimeFixOffset = response.unixTime + responseDuration / 2 - Date.now() / 1000
+
 	schoolDay = response.schoolDay
 	noSchoolReason = response.event
-	unixTimeFixOffset = response.unixTime - Date.now() / 1000
 	
 	if (schoolDay) {
 		currentDayType = response.dayType
@@ -118,7 +134,7 @@ addEventListener('resize', () => {
 	resizeTableTimeout = setTimeout(() => {updateBellScheduleTable()}, 10)
 })
 
-async function updateBellScheduleTable() {
+function updateBellScheduleTable() {
 	let innerCurrentPeriod = displayCurrentSchedule == currentSchedule ? currentPeriod?.pd : undefined
 	if (JSON.stringify([bellScheduleTable, displayCurrentSchedule, innerCurrentPeriod, passing, window.innerWidth]) == previousTableSchedulePeriod) return
 	previousTableSchedulePeriod = JSON.stringify([bellScheduleTable, displayCurrentSchedule, innerCurrentPeriod, passing, window.innerWidth])
@@ -174,9 +190,10 @@ async function updateBellScheduleTable() {
 
 let today = 'not today'
 
-async function updateStuff() {
+function updateStuff() {
 	if (today != new Date().getDay()) {
-		await updateTodayInfo()
+		updateTodayInfo()
+		updateTodayInfoFromAPI()
 		today = new Date().getDay()
 	}
 
