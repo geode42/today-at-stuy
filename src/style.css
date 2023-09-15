@@ -60,7 +60,6 @@ body {
 }
 
 main {
-	padding-bottom: 1rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -101,19 +100,23 @@ button {
 /* -------------------------------------------------------------------------- */
 #bottom-section {
 	display: flex;
-	width: calc(80% + 2rem);
-	margin-inline: auto;
+	width: 100%;
+	padding-inline: 1rem;
+	margin-bottom: 1rem;
 	margin-top: 2rem;
 }
 
 #bottom-section > * {
 	display: grid;
 	place-items: center;
+	flex-shrink: 0;
 }
 
 #a-day-b-day {
 	font-size: 2.4rem;
 	font-weight: 600;
+	width: 3.6rem;
+	text-align: left;
 }
 
 #schedule-name-display {
@@ -121,11 +124,13 @@ button {
 	background: transparent;
 	border: none;
 	font-size: 1rem;
+	flex-shrink: 1;
 }
 
 .open-options-menu-button {
 	background-color: transparent;
 	border: none;
+	width: 3.6rem;
 }
 
 /* -------------------------------------------------------------------------- */
