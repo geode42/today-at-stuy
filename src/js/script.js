@@ -1,48 +1,3 @@
-const bellSchedules = {
-	'Regular': [
-		{ pd: '1', start: '8:00', end: '8:41' },
-		{ pd: '2', start: '8:45', end: '9:26' },
-		{ pd: '3', start: '9:31', end: '10:15' },
-		{ pd: '4', start: '10:20', end: '11:01' },
-		{ pd: '5', start: '11:06', end: '11:47' },
-		{ pd: '6', start: '11:52', end: '12:33' },
-		{ pd: '7', start: '12:38', end: '13:19' },
-		{ pd: '8', start: '13:24', end: '14:05' },
-		{ pd: '9', start: '14:09', end: '14:50' },
-		{ pd: '10', start: '14:54', end: '15:35' },
-	],
-	'Conference': [
-		{ pd: '1', start: '8:00', end: '8:37' },
-		{ pd: '2', start: '8:41', end: '9:18' },
-		{ pd: '3', start: '9:22', end: '9:59' },
-		{ pd: '4', start: '10:03', end: '10:40' },
-		{ pd: '5', start: '10:44', end: '11:21' },
-		{ pd: '6', start: '11:25', end: '12:02' },
-		{ pd: '7', start: '12:06', end: '12:43' },
-		{ pd: '8', start: '12:47', end: '13:24' },
-		{ pd: '9', start: '13:28', end: '14:05' },
-		{ pd: '10', start: '14:09', end: '14:46' },
-	],
-	'Homeroom': [
-		{ pd: '1', start: '8:00', end: '8:40' },
-		{ pd: '2', start: '8:45', end: '9:25' },
-		{ pd: '3', start: '9:29', end: '10:09' },
-		{ pd: 'hr', start: '10:13', end: '10:25' },
-		{ pd: '4', start: '10:30', end: '11:10' },
-		{ pd: '5', start: '11:14', end: '11:54' },
-		{ pd: '6', start: '11:58', end: '12:38' },
-		{ pd: '7', start: '12:42', end: '13:22' },
-		{ pd: '8', start: '13:26', end: '14:06' },
-		{ pd: '9', start: '14:10', end: '14:50' },
-		{ pd: '10', start: '14:55', end: '15:35' },
-	],
-}
-
-const optimizedBellSchedules = Object.entries(bellSchedules).map(([name, schedule]) => ({ name: name, schedule: schedule.map(j => ({ pd: j.pd, start: getSecondsFromString(j.start), end: getSecondsFromString(j.end) })) }))
-
-const getByID = id => document.getElementById(id)
-const changeTextContent = (element, newText) => { if (element.textContent != newText) element.textContent = newText }
-
 const timeElapsedElement = getByID('time-elapsed'),
       timeElapsedUnitsElement = getByID('time-elapsed-units'),
       timeRemainingElement = getByID('time-remaining'),
@@ -58,10 +13,6 @@ const timeElapsedElement = getByID('time-elapsed'),
 // EST is -5 hours, EDT is -4 hours
 const secondsOffsetFromUTC = -4 * 60 * 60
 
-function getSecondsFromString(time) {
-	const [hours, minutes] = time.split(':')
-	return Number(hours) * 3600 + Number(minutes) * 60
-}
 let currentSchedule = 'Regular'
 let scheduleViewerSchedule = 'Regular'
 let currentDayType = 'A'
@@ -110,13 +61,6 @@ async function updateTodayInfoFromAPI() {
 	}
 }
 
-
-function createDiv(text='', className='') {
-	const div = document.createElement('div')
-	div.textContent = text
-	div.className = className
-	return div
-}
 
 let previousTableSchedulePeriod = 'Hi! Thanks for looking through the code, any suggestions are appreciated :)' // To let the function below know when to update the table
 const currentPeriodRect = createDiv('', 'current-period-rect')

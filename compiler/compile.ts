@@ -4,19 +4,16 @@ import { minify } from 'npm:html-minifier-terser@7'
 import { bundleLocalHTMLImports } from './htmlimportbundler.ts'
 import * as brotli from "https://deno.land/x/brotli@0.1.7/mod.ts"
 import * as compress from "https://deno.land/x/compress@v0.4.5/mod.ts"
+import { assert } from "https://deno.land/std@0.202.0/assert/mod.ts"
 
 const srcDirectory = './src'
 const distDirectory = './dist'
 
 const bundleInfo = await bundleLocalHTMLImports(path.join(srcDirectory, 'index.html'))
-if (bundleInfo == null) {
-	console.log('bundleInfo is null?')
-	Deno.exit(1)
-}
+assert(bundleInfo != null, "bundleInfo is null")
 
 const html = '<!DOCTYPE html>' + await minify(bundleInfo.html, {
 	minifyCSS: true,
-	minifyJS: true,
 	collapseBooleanAttributes: true,
 	collapseWhitespace: true,
 	removeAttributeQuotes: true,
@@ -29,23 +26,39 @@ const html = '<!DOCTYPE html>' + await minify(bundleInfo.html, {
 // Creates directory if it doesn't exist
 await fs.emptyDir(distDirectory)
 
+async function addCompressedVersionsOfFile(path: string): Promise<void> {
+	await Deno.writeFile(path + '.gz', compress.gzip(await Deno.readFile(path)))
+	await Deno.writeFile(path + '.br', brotli.compress(await Deno.readFile(path)))
+}
+
 Deno.writeTextFile(path.join(distDirectory, 'index.html'), html)
+addCompressedVersionsOfFile(path.join(distDirectory, 'index.html'))
 
 for await (const entry of fs.walk(srcDirectory)) {
 	if (path.resolve(entry.path) == path.resolve(srcDirectory)) continue
 	console.log(entry.name)
 	if (entry.isDirectory) {
-		await Deno.mkdir(path.join(distDirectory, path.relative(srcDirectory, entry.path)))
+		// Check to see if it has any files that haven't been embedded into the HTML
+		let nonEmbeddedFiles = false
+		for await (const innerEntry of fs.walk(entry.path, { includeDirs: false })) {
+			if (!bundleInfo.embeddedFiles.includes(path.resolve(innerEntry.path))) {
+				nonEmbeddedFiles = true
+				break
+			}
+		}
+		// If it does, make the directory
+		if (nonEmbeddedFiles) {
+			await Deno.mkdir(path.join(distDirectory, path.relative(srcDirectory, entry.path)))
+		}
 		continue
 	}
 	if (bundleInfo.embeddedFiles.includes(path.resolve(entry.path))) {
 		continue
 	}
 
-	await fs.copy(entry.path, path.join(distDirectory, path.relative(srcDirectory, entry.path)))
-}
+	const outpathPath = path.join(distDirectory, path.relative(srcDirectory, entry.path))
 
-for await (const entry of Deno.readDir(distDirectory)) {
-	Deno.writeFile(path.join(distDirectory, entry.name + '.gz'), compress.gzip(await Deno.readFile(path.join(distDirectory, entry.name))))
-	Deno.writeFile(path.join(distDirectory, entry.name + '.br'), brotli.compress(await Deno.readFile(path.join(distDirectory, entry.name))))
+	await fs.copy(entry.path, outpathPath)
+
+	addCompressedVersionsOfFile(outpathPath)
 }
