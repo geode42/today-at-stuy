@@ -1,11 +1,10 @@
-import { initParser, DOMParser } from "https://deno.land/x/deno_dom@v0.1.38/deno-dom-wasm-noinit.ts"
+import { assert } from "https://deno.land/std@0.202.0/assert/mod.ts"
 import * as path from "https://deno.land/std@0.190.0/path/mod.ts"
-//// @deno-types="npm:@types/terser@4.17.15"
+import { initParser, DOMParser } from "https://deno.land/x/deno_dom@v0.1.38/deno-dom-wasm-noinit.ts"
 import * as terser from "npm:terser@5.20.0"
-
 // @deno-types="npm:@types/mime-types@2.1.1"
 import mime from "npm:mime-types@2.1.35"
-import { assert } from "https://deno.land/std@0.202.0/assert/mod.ts"
+
 
 function textToDataURL(text: string, mimeType: string): string {
 	return `data:${mimeType};base64,${btoa(unescape(encodeURIComponent(text)))}`
