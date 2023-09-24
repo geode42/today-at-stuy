@@ -4,6 +4,7 @@ import { initParser, DOMParser } from "https://deno.land/x/deno_dom@v0.1.38/deno
 import * as terser from "npm:terser@5.20.0"
 // @deno-types="npm:@types/mime-types@2.1.1"
 import mime from "npm:mime-types@2.1.35"
+import svgo from 'npm:svgo@3.0.2'
 
 
 function textToDataURL(text: string, mimeType: string): string {
@@ -48,10 +49,16 @@ export async function bundleLocalHTMLImports(htmlPath: string): Promise<{html: s
 
 
 
-		const mimeType = mime.lookup(href)
+		const mimeType = link.getAttribute('type') || mime.lookup(href)
 		if (!mimeType) continue
 		
-		const text = await Deno.readTextFile(filePath)
+		let text = await Deno.readTextFile(filePath)
+
+		// Minify SVGs with SVGO
+		if (mimeType == 'image/svg+xml') {
+			text = svgo.optimize(text, { multipass: true }).data
+		}
+
 		const dataURL = textToDataURL(text, mimeType)
 
 		link.setAttribute('href', dataURL)
