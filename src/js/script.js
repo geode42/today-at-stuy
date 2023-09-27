@@ -96,7 +96,26 @@ function updateBellScheduleTable() {
 			if (hours > 12) hours %= 12  // lol, type coercion
 			return `${hours}:${minutes}`
 		}
-		[pd, timeTo12HourTime(start), timeTo12HourTime(end)].forEach(i => row.append(createDiv(i)))
+
+		const customPeriodName = localStorage.getItem(`custom-period-names.${pd}`)
+		const periodNameDiv = createDiv(customPeriodName || pd)
+		periodNameDiv.contentEditable = true
+
+		// Select the div's text on focus
+		periodNameDiv.onfocus = e => {
+			const range = document.createRange()
+			range.selectNodeContents(periodNameDiv)
+			const selection = getSelection()
+			selection.removeAllRanges()
+			selection.addRange(range)
+		}
+
+		// Save the new value on input
+		periodNameDiv.oninput = e => {
+			localStorage.setItem(`custom-period-names.${pd}`, e.target.textContent)
+		}
+
+		row.append(periodNameDiv, createDiv(timeTo12HourTime(start)), createDiv(timeTo12HourTime(end)))
 
 		// Current period coloring
 		if (innerCurrentPeriod == pd) {

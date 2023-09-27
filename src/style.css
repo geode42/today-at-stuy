@@ -219,8 +219,11 @@ button {
 }
 
 #bell-schedule-table > * > * {
+	min-width: 0;
 	width: 9rem;
-	text-align: center;
+	height: 100%;
+	display: grid;
+	place-items: center;
 }
 
 .current-period-rect {
