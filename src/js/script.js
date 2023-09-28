@@ -1,14 +1,35 @@
 const timeElapsedElement = getByID('time-elapsed'),
-      timeElapsedUnitsElement = getByID('time-elapsed-units'),
-      timeRemainingElement = getByID('time-remaining'),
-      timeRemainingUnitsElement = getByID('time-remaining-units'),
-      ADayBDayElement = getByID('a-day-b-day'),
-      bellScheduleTable = getByID('bell-schedule-table'),
+	  timeElapsedUnitsElement = getByID('time-elapsed-units'),
+	  timeRemainingElement = getByID('time-remaining'),
+	  timeRemainingUnitsElement = getByID('time-remaining-units'),
+	  ADayBDayElement = getByID('a-day-b-day'),
+	  bellScheduleTable = getByID('bell-schedule-table'),
 	  noSchoolMessageElement = getByID('no-school-message'),
-      noSchoolReasonElement = getByID('no-school-reason'),
+	  noSchoolReasonElement = getByID('no-school-reason'),
 	  scheduleNameDisplay = getByID('schedule-name-display'),
 	  noSchoolInfoContainer = getByID('no-school-info-container'),
-	  timeElapsedRemainingContainer = getByID('time-elapsed-remaining-container')
+	  timeElapsedRemainingContainer = getByID('time-elapsed-remaining-container'),
+	  
+	  optionsDialog = getByID('options-dialog'),
+	  optionsMenuOpenButton = getByID('options-menu-open-button'),
+	  optionsMenuCloseButton = getByID('options-menu-close-button')
+
+/* -------------------- Options menu button history stuff ------------------- */
+// So that you'll go to the main page when you press back while in the options menu
+
+addEventListener('popstate', e => {
+	optionsDialog.open ? optionsDialog.close() : optionsDialog.showModal()
+})
+
+optionsMenuOpenButton.onclick = e => {
+	history.pushState({}, '')
+	optionsDialog.showModal() // pushState doesn't trigger popstate
+}
+
+optionsMenuCloseButton.onclick = e => {
+	history.back() // the popstate listener will handle the rest
+}
+/* -------------------------------------------------------------------------- */
 
 // EST is -5 hours, EDT is -4 hours
 const secondsOffsetFromUTC = -4 * 60 * 60

@@ -1,4 +1,3 @@
-const optionsDialog = document.getElementById('options-dialog')
 const optionsMenu = document.getElementById('options-menu')
 const mainElement = document.getElementsByTagName('main')[0]
 const rootElement = document.documentElement
@@ -6,7 +5,6 @@ const lightThemeOptionsContainer = document.getElementById('light-theme-options-
 const darkThemeOptionsContainer = document.getElementById('dark-theme-options-container')
 const themeOverrideContainer = document.getElementById('theme-override-container')
 const themeCustomizationMenu = document.getElementById('theme-customization-menu')
-const optionsMenuOpenButton = document.getElementById('options-menu-open-button')
 const themeColorMetaTag = document.getElementById('theme-color-meta-tag')
 // const customizeThemeHeader = document.getElementById('customize-theme-header')
 
