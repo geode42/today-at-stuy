@@ -1,4 +1,5 @@
 const irregularBellScheduleDays = {
+	'October 3 2023': 'Homeroom',
 	'October 4 2023': 'Conference',
 	'October 31 2023': 'Conference',
 	'November 14 2023': 'Homeroom',
