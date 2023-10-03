@@ -86,10 +86,13 @@ async function updateTodayInfoFromAPI() {
 let previousTableSchedulePeriod = 'Hi! Thanks for looking through the code, any suggestions are appreciated :)' // To let the function below know when to update the table
 const currentPeriodRect = createDiv('', 'current-period-rect')
 
-let displayCurrentSchedule = currentSchedule
+let scheduleOverride
 
 scheduleNameDisplay.onclick = () => {
-	displayCurrentSchedule = Object.keys(bellSchedules).find((_, index) => Object.keys(bellSchedules)[--index] == displayCurrentSchedule) || Object.keys(bellSchedules)[0]
+	scheduleOverride = Object.keys(bellSchedules).find((_, index) => Object.keys(bellSchedules)[--index] == (scheduleOverride || currentSchedule)) || Object.keys(bellSchedules)[0]
+	if (scheduleOverride == currentSchedule) {
+		scheduleOverride = undefined
+	}
 	updateBellScheduleTable()
 }
 
@@ -100,15 +103,16 @@ addEventListener('resize', () => {
 })
 
 function updateBellScheduleTable() {
-	let innerCurrentPeriod = displayCurrentSchedule == currentSchedule ? currentPeriod?.pd : undefined
-	if (JSON.stringify([bellScheduleTable, displayCurrentSchedule, innerCurrentPeriod, passing, window.innerWidth]) == previousTableSchedulePeriod) return
-	previousTableSchedulePeriod = JSON.stringify([bellScheduleTable, displayCurrentSchedule, innerCurrentPeriod, passing, window.innerWidth])
+	let innerCurrentPeriod = scheduleOverride ? undefined : currentPeriod?.pd
+	let innerCurrentSchedule = scheduleOverride || currentSchedule
+	if (JSON.stringify([bellScheduleTable, innerCurrentSchedule, innerCurrentPeriod, passing, window.innerWidth]) == previousTableSchedulePeriod) return
+	previousTableSchedulePeriod = JSON.stringify([bellScheduleTable, innerCurrentSchedule, innerCurrentPeriod, passing, window.innerWidth])
 
-	changeTextContent(scheduleNameDisplay, displayCurrentSchedule)
+	changeTextContent(scheduleNameDisplay, innerCurrentSchedule)
 
 	Array(...bellScheduleTable.children).slice(1).forEach(i => i.remove())
 
-	for (const {pd, start, end} of bellSchedules[displayCurrentSchedule]) {
+	for (const {pd, start, end} of bellSchedules[innerCurrentSchedule]) {
 		const row = createDiv('', 'actual-row')
 
 		// Add cells to row
@@ -182,7 +186,7 @@ function updateStuff() {
 	}
 
 	const secondsSinceMidnight = (Date.now() / 1000 + unixTimeFixOffset + secondsOffsetFromUTC) % (24 * 60 * 60)
-	const currentBellSchedule = optimizedBellSchedules.find(e => (e.name = currentSchedule)).schedule
+	const currentBellSchedule = optimizedBellSchedules.find(e => (e.name == (scheduleOverride || currentSchedule))).schedule
 	/* ---------------------------- No school dialog ---------------------------- */
 	if (!schoolDay) {
 		noSchoolInfoContainer.style.display = null
