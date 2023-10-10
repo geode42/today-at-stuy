@@ -4,6 +4,13 @@
 	font-display: swap;
 }
 
+@font-face {
+	font-family: Inter;
+	font-style: italic;
+	src: url('InterVariable-Italic.woff2');
+	font-display: swap;
+}
+
 *, *:before, *:after {
 	box-sizing: border-box;
 	font-family: inherit;
@@ -12,8 +19,9 @@
 :root, ::backdrop {
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
-	font-weight: 400;
+	font-weight: 450;
 	font-size: 18px;
+	font-feature-settings: 'ss01', 'ss04';  /* Open Digits, Disambiguation w/o zero */
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
@@ -26,8 +34,8 @@
 	
 	--current-period-border-radius: 0.3rem;
 	--current-period-border-width: 0.15rem;
-	--elapsed-remaining-divider-thickness: 0.1rem;
-	--table-divider-thickness: 0.05rem;
+	--elapsed-remaining-divider-thickness: 0.09rem;
+	--table-divider-thickness: 0.09rem;
 
 	/* Colors */
 	--foreground: black;
@@ -97,7 +105,7 @@ button {
 }
 
 #no-school-message {
-	font-weight: 500;
+	font-weight: 700;
 	font-size: 1.2rem;
 }
 
@@ -131,6 +139,7 @@ button {
 	border: none;
 	font-size: 1rem;
 	flex-shrink: 1;
+	font-weight: 550;
 }
 
 .open-options-menu-button {
@@ -157,9 +166,9 @@ button {
 
 .vertical-separator {
 	display: block;
-	width: var(--elapsed-remaining-divider-thickness);
+	border-radius: 999px;
+	border: var(--elapsed-remaining-divider-thickness) solid var(--elapsed-remaining-separator);
 	height: 5rem;
-	background-color: var(--elapsed-remaining-separator);
 }
 
 .elapsed-remaining-boxes {
@@ -183,6 +192,8 @@ button {
 
 .elapsed-remaining-label {
 	color: var(--elapsed-remaining-labels);
+	font-weight: 570;
+	font-style: italic;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -202,8 +213,8 @@ button {
 }
 
 #bell-schedule-table hr {
-	outline: var(--table-divider-thickness) solid var(--period-dividers);
-	border: none;
+	border: var(--table-divider-thickness) solid var(--period-dividers);
+	border-radius: 999px;
 	margin: 0;
 	z-index: -20;
 }
@@ -256,8 +267,8 @@ button {
 	left: 0;
 	background-image: repeating-linear-gradient(-45deg, var(--current-period-background), var(--current-period-background) 10px, var(--current-period-stripe-background2) 10px, var(--current-period-stripe-background2) 20px);
 	z-index: -10;
-	background-size: 200% 200%;
-	animation: barberpole 10s linear infinite;
+	background-size: 1000%;
+	animation: barberpole 70s linear infinite;
 }
 
 /* -------------------------------------------------------------------------- */

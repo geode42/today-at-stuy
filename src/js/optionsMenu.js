@@ -17,14 +17,14 @@ const themes = [
 		'fallback': 'default-light',
 		'isDarkTheme': false,
 		'colors': {
-			'foreground': '000000',
+			'foreground': '444',
 			'background': 'FFFFFF',
 			'time-elapsed': '000000',
 			'time-remaining': '000000',
-			'elapsed-remaining-units': '0005',
-			'elapsed-remaining-labels': '0008',
-			'elapsed-remaining-separator': 'DDD',
-			'period-dividers': 'BBB',
+			'elapsed-remaining-units': 'AAA',
+			'elapsed-remaining-labels': 'AAA',
+			'elapsed-remaining-separator': 'DFDFDF',
+			'period-dividers': 'DFDFDF',
 			'current-period-background': '3AFF3380',
 			'current-period-stripe-background2': '24e21d80',
 			'current-period-border': '60D65C',
@@ -38,14 +38,14 @@ const themes = [
 		'fallback': 'default-dark',
 		'isDarkTheme': true,
 		'colors': {
-			'foreground': 'DDD',
-			'background': '111',
+			'foreground': 'CCC',
+			'background': '1B1B1B',
 			'time-elapsed': 'DDD',
 			'time-remaining': 'DDD',
 			'elapsed-remaining-units': 'FFF5',
-			'elapsed-remaining-labels': 'FFF8',
+			'elapsed-remaining-labels': '777',
 			'elapsed-remaining-separator': '333',
-			'period-dividers': '555',
+			'period-dividers': '333',
 			'current-period-background': '56E05280',
 			'current-period-stripe-background2': '4dbb4980',
 			'current-period-border': '36A932',
@@ -73,7 +73,9 @@ const themes = [
 		'fallback': 'default-dark',
 		'isDarkTheme': true,
 		'colors': {
-			'background': '000000'
+			'background': '000000',
+			'elapsed-remaining-separator': '222',
+			'period-dividers': '222',
 		}
 	},
 	{
@@ -84,7 +86,10 @@ const themes = [
 		'colors': {
 			'background': '323437',
 			'time-elapsed': 'E2B714',
-			'time-remaining': 'E2B714'
+			'time-remaining': 'E2B714',
+			'elapsed-remaining-labels': '636871',
+			'elapsed-remaining-separator': '42454a',
+			'period-dividers': '42454a',
 		}
 	},
 ]
