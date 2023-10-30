@@ -36,6 +36,19 @@ const bellSchedules = {
 		{ pd: '9', start: '14:10', end: '14:50' },
 		{ pd: '10', start: '14:55', end: '15:35' },
 	],
+	'Extended Homeroom': [
+		{ pd: '1', start: '8:00', end: '8:41' },
+		{ pd: '2', start: '8:45', end: '9:25' },
+		{ pd: '3', start: '9:29', end: '10:08' },
+		{ pd: 'hr', start: '10:12', end: '10:33' },
+		{ pd: '4', start: '10:37', end: '11:16' },
+		{ pd: '5', start: '11:20', end: '11:59' },
+		{ pd: '6', start: '12:03', end: '12:42' },
+		{ pd: '7', start: '12:46', end: '13:25' },
+		{ pd: '8', start: '13:29', end: '14:08' },
+		{ pd: '9', start: '14:12', end: '14:51' },
+		{ pd: '10', start: '14:55', end: '15:35' },
+	],
 }
 
 const optimizedBellSchedules = Object.entries(bellSchedules).map(([name, schedule]) => ({ name: name, schedule: schedule.map(j => ({ pd: j.pd, start: getSecondsFromString(j.start), end: getSecondsFromString(j.end) })) }))
