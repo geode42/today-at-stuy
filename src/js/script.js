@@ -32,7 +32,7 @@ optionsMenuCloseButton.onclick = e => {
 /* -------------------------------------------------------------------------- */
 
 // EST is -5 hours, EDT is -4 hours
-const secondsOffsetFromUTC = -4 * 60 * 60
+const secondsOffsetFromUTC = -5 * 60 * 60
 
 let currentSchedule = 'Regular'
 let scheduleViewerSchedule = 'Regular'
