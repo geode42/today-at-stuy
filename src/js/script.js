@@ -47,7 +47,7 @@ let noSchoolReason = ''
 let unixTimeFixOffset = 0
 
 function updateTodayInfo() {
-	const today = new Date(Date.now() + secondsOffsetFromUTC * 1000)
+	const today = new Date()
 	
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 	const humanDateFormat = `${months[today.getMonth()]} ${today.getDate()} ${today.getFullYear()}`
