@@ -5,11 +5,15 @@
 	<link rel="icon" href="./favicon.svg" type="image/svg+xml">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Today at Stuy</title>
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/element.css">
+	<link rel="stylesheet" href="css/util.css">
+	<link rel="stylesheet" href="css/optionsMenu.css">
 	<script src="js/utils.js" defer></script>
 	<script src="js/bellSchedules.js" defer></script>
 	<script src="js/unstableAPI.js" defer></script>
 	<script src="js/script.js" defer></script>
+	<script src="js/themer.js" defer></script>
 	<script src="js/optionsMenu.js" defer></script>
     <link rel="manifest" href="manifest.json" />
 	<meta name="theme-color" id="theme-color-meta-tag" content='#1FA7E0'>
@@ -56,28 +60,16 @@
 	</main>
 
 	<dialog id="options-dialog">
-		<button id="options-menu-close-button" class="close-button">
-			<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path fill="currentColor" d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z"/></svg>
-		</button>
 		<div id="options-menu">
-			<div class="top-section">
-				<section>
-					<h2>Current theme</h2>
-					<div id="theme-override-container"></div>
-				</section>
-				<section>
-					<h2>Light theme</h2>
-					<div id="light-theme-options-container"></div>
-				</section>
-				<section>
-					<h2>Dark theme</h2>
-					<div id="dark-theme-options-container"></div>
-				</section>
-				<section>
-					<h2 id="customize-theme-header">Customize active theme</h2>
-					<div id="theme-customization-menu"></div>
-				</section>
+			<div id="top-section">
+				<div>
+					<button id="options-menu-close-button" class="close-button">
+						<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path fill="currentColor" d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z"/></svg>
+					</button>
+				</div>
+				<div id="theme-list"></div>
 			</div>
+
 			<div class="bottom-section">
 				<div>Made by <strong>geode42</strong></div>
 				<a href="https://github.com/geode42/today-at-stuy" target="_blank" rel="noreferrer noopener">GitHub repo</a>

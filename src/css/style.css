@@ -1,19 +1,20 @@
 @font-face {
 	font-family: Inter;
-	src: url('InterVariable.woff2');
+	src: url('../InterVariable.woff2');
 	font-display: swap;
 }
 
 @font-face {
 	font-family: Inter;
 	font-style: italic;
-	src: url('InterVariable-Italic.woff2');
+	src: url('../InterVariable-Italic.woff2');
 	font-display: swap;
 }
 
 *, *:before, *:after {
 	box-sizing: border-box;
 	font-family: inherit;
+	transition: 300ms all;
 }
 
 :root, ::backdrop {
@@ -30,32 +31,6 @@
 	-webkit-text-size-adjust: 100%;
 
 	--compact-ui: 0;
-
-	
-	--current-period-border-radius: 0.3rem;
-	--current-period-border-width: 0.15rem;
-	--elapsed-remaining-divider-thickness: 0.09rem;
-	--table-divider-thickness: 0.09rem;
-
-	/* Colors */
-	--foreground: black;
-	--background: white;
-	--time-elapsed: var(--foreground);
-	--time-remaining: var(--foreground);
-	--elapsed-remaining-units: #0005;
-	--elapsed-remaining-labels: #0008;
-	--elapsed-remaining-separator: #DDD;
-	--period-dividers: #BBB;
-	--current-period-background: hsla(118, 100%, 60%, 0.5);
-	--current-period-stripe-background2: hsla(118, 77%, 50%, 0.5);
-	--current-period-border: hsl(118, 60%, 60%);
-
-	--options-menu-background: var(--background);
-	--button-background: #F4F4F4;
-	--button-border: #CCC;
-	--button-hover-background: var(--button-border);
-	--dialog-backdrop: #6665;
-	--dialog-blur: 1rem
 }
 
 body {
@@ -76,10 +51,6 @@ main {
 	width: 100%;
 	max-width: 30rem;
 	max-height: 50rem;
-}
-
-button {
-	-webkit-tap-highlight-color: transparent;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -167,7 +138,7 @@ button {
 .vertical-separator {
 	display: block;
 	border-radius: 999px;
-	border: var(--elapsed-remaining-divider-thickness) solid var(--elapsed-remaining-separator);
+	border: var(--elapsed-remaining-divider-thickness) solid var(--elapsed-remaining-divider);
 	height: 5rem;
 }
 
@@ -213,7 +184,7 @@ button {
 }
 
 #bell-schedule-table hr {
-	border: var(--table-divider-thickness) solid var(--period-dividers);
+	border: var(--table-dividers-thickness) solid var(--table-dividers);
 	border-radius: 999px;
 	margin: 0;
 	z-index: -20;
@@ -238,7 +209,7 @@ button {
 }
 
 .current-period-rect {
-	background-color: var(--current-period-background);
+	background-color: var(--current-period);
 	position: absolute;
 	outline: var(--current-period-border-width) solid var(--current-period-border);
 	border-radius: var(--current-period-border-radius);
@@ -265,188 +236,8 @@ button {
 	height: 100%;
 	top: 0;
 	left: 0;
-	background-image: repeating-linear-gradient(-45deg, var(--current-period-background), var(--current-period-background) 10px, var(--current-period-stripe-background2) 10px, var(--current-period-stripe-background2) 20px);
+	background-image: repeating-linear-gradient(-45deg, var(--current-period-passing1), var(--current-period-passing1) 10px, var(--current-period-passing2) 10px, var(--current-period-passing2) 20px);
 	z-index: -10;
 	background-size: 1000%;
 	animation: barberpole 70s linear infinite;
-}
-
-/* -------------------------------------------------------------------------- */
-/*                                options menu                                */
-/* -------------------------------------------------------------------------- */
-
-dialog {
-	width: calc(min(100vw, 30rem) - 2rem);
-	border: none;
-	border-radius: clamp(1rem, calc(10vw - 0.5rem), 2rem);
-	height: calc(100vh - 2rem);
-	background-color: var(--options-menu-background);
-	color: inherit;
-	padding: 0;
-}
-
-dialog::backdrop {
-	background: var(--dialog-backdrop);
-	backdrop-filter: blur(var(--dialog-blur));
-}
-
-#options-menu {
-	padding: 1.5rem;
-	display: flex;
-	height: 100%;
-	flex-direction: column;
-	justify-content: space-between;
-}
-
-#options-menu-open-button {
-	opacity: 0.4
-}
-
-#options-menu-close-button {
-	opacity: 0.8;
-	background-color: transparent;
-	border: none;
-	position: absolute;
-	top: 1.2rem;
-	right: 1.2rem;
-}
-
-#options-menu-close-button:hover {
-	background: var(--button-hover-background)
-}
-
-#options-menu > .bottom-section {
-	text-align: center;
-	/* Flexbox ftw */
-	display: flex;
-	flex-direction: column;
-	gap: 0.2rem;
-}
-
-
-#options-menu section {
-	margin-bottom: 1rem;
-}
-
-#options-menu section > div {
-	display: flex;
-	gap: 0.2rem
-}
-
-#options-menu h2 {
-	margin: 0;
-	font-size: 1.4rem
-}
-
-#theme-customization-menu {
-	flex-direction: column;
-}
-
-#theme-customization-menu > .color-container {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(8.6rem, 1fr));
-	gap: 0.2rem;
-}
-
-#theme-customization-menu .color-container > button {
-	padding-block: 0.5rem
-}
-
-button {
-	background-color: var(--button-background);
-	border: 0.1rem solid var(--button-border);
-	border-radius: 0.5rem;
-	padding: 0.4rem;
-	color: inherit;
-}
-
-button:hover {
-	background-color: var(--button-hover-background);
-	cursor: pointer
-}
-
-.color-picker > .range-container {
-	display: grid;
-	grid-template-columns: max-content auto;
-	gap: 0.2rem
-	
-}
-
-.color-picker > * {
-	width: calc(80% + 2rem);
-	margin-inline: auto;
-	display: block
-}
-
-.color-picker .accept-button {
-	margin-bottom: 1rem;
-	padding-block: 0.7rem
-}
-
-.color-picker input {
-	margin-bottom: 1rem;
-}
-
-.color-picker {
-	width: 100%
-}
-
-.radio-button.active {
-	background-color: var(--current-period-background);
-	border-color: var(--current-period-border);
-}
-
-.slightly-hidden {
-	opacity: 70%
-}
-
-svg {
-	width: 2.5rem
-}
-
-a {
-	color: #1c6ce4;
-	text-decoration: none;
-}
-
-/* Reset styles */
-input[type="range"] {
-	-webkit-appearance: none;
-	-appearance: none;
-	background: transparent;
-	cursor: pointer;
-	width: 100%;
-}
-
-/* Track */
-input[type="range"]::-webkit-slider-runnable-track {
-	background: #8885;
-	height: 0.3rem;
-	border-radius: 999px;
-}
-
-input[type="range"]::-moz-range-track {
-	background: #8885;
-	height: 0.3rem;
-	border-radius: 999px;
-}
-
-/* Thumb */
-input[type="range"]::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	--track-height: 0.3rem;
-	--size: 0.9rem;
-	width: var(--size);
-	height: var(--size);
-	margin-top: calc(var(--track-height) / 2 - var(--size) / 2);
-	background: rgb(0, 94, 255);
-	border-radius: 999px;
-}
-
-input[type="range"]::-moz-range-thumb {
-	border: none;
-	border-radius: 999px;
-	background: rgb(0, 94, 255);
-	width: 0.9rem;
-	height: 0.9rem;
 }

@@ -1,0 +1,45 @@
+#options-menu {
+	padding: 1.5rem;
+	display: flex;
+	height: 100%;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+#options-menu-open-button {
+	opacity: 0.4;
+	aspect-ratio: 1;
+}
+
+#options-menu-close-button {
+	opacity: 0.8;
+	background-color: transparent;
+	border: none;
+	aspect-ratio: 1;
+	height: min-content;
+	width: min-content;
+	float: right;
+}
+
+#options-menu-close-button:hover {
+	background: var(--button-hover-background)
+}
+
+#options-menu > .bottom-section {
+	text-align: center;
+	/* Flexbox ftw */
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+}
+
+#theme-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+}
+
+#theme-list > * {
+	width: 100%;
+	padding-block: 0.9rem;
+}

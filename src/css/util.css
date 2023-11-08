@@ -1,0 +1,3 @@
+.radio-button.active {
+	background-color: var(--radio-button-active);
+}

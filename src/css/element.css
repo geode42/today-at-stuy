@@ -1,0 +1,85 @@
+/* --------------------------------- button --------------------------------- */
+button {
+	background-color: var(--button);
+	border: none;
+	border-radius: 0.6rem;
+	padding: 0.6rem;
+	color: inherit;
+	-webkit-tap-highlight-color: transparent;
+	font-size: 0.9rem;
+}
+
+button:hover {
+	background-color: var(--button-hover);
+	cursor: pointer
+}
+
+/* ------------------------------------ a ----------------------------------- */
+a {
+	color: #1c6ce4;
+	text-decoration: none;
+}
+
+/* --------------------------------- dialog --------------------------------- */
+dialog {
+	width: calc(min(100vw, 30rem) - 2rem);
+	border: none;
+	border-radius: clamp(1rem, calc(10vw - 0.5rem), 2rem);
+	height: calc(100vh - 2rem);
+	background-color: var(--dialog);
+	color: inherit;
+	padding: 0;
+}
+
+dialog::backdrop {
+	background: var(--dialog-backdrop);
+	backdrop-filter: blur(var(--dialog-backdrop-blur));
+}
+
+/* ----------------------------------- svg ---------------------------------- */
+svg {
+	width: 2.5rem
+}
+
+/* ---------------------------- input[type=range] --------------------------- */
+/* Reset styles */
+input[type="range"] {
+	-webkit-appearance: none;
+	-appearance: none;
+	background: transparent;
+	cursor: pointer;
+	width: 100%;
+}
+
+/* Track */
+input[type="range"]::-webkit-slider-runnable-track {
+	background: #8885;
+	height: 0.3rem;
+	border-radius: 999px;
+}
+
+input[type="range"]::-moz-range-track {
+	background: #8885;
+	height: 0.3rem;
+	border-radius: 999px;
+}
+
+/* Thumb */
+input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	--track-height: 0.3rem;
+	--size: 0.9rem;
+	width: var(--size);
+	height: var(--size);
+	margin-top: calc(var(--track-height) / 2 - var(--size) / 2);
+	background: rgb(0, 94, 255);
+	border-radius: 999px;
+}
+
+input[type="range"]::-moz-range-thumb {
+	border: none;
+	border-radius: 999px;
+	background: rgb(0, 94, 255);
+	width: 0.9rem;
+	height: 0.9rem;
+}
