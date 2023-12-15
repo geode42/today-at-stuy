@@ -69,21 +69,27 @@ function RGBAtoHSVA(rgba) {
 }
 
 // Somewhat copied from https://stackoverflow.com/a/39077686 because I haven't stopped being lazy
-const RGBAToHex = rgba => rgba.map(x => x.toString(16).padStart(2, '0')).join('')
+const RGBAToHex = rgba => '#' + rgba.map(x => x.toString(16).padStart(2, '0')).join('')
 const HexToRGBA = hex => {
 	if (hex.startsWith('#')) hex = hex.substring(1)
 	switch (hex.length) {
 		case 3:
 			hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2] + 'FF'
-			break;
+			break
 		case 4:
 			hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3]
-			break;
+			break
 		case 6:
 			hex += 'FF'
-			break;
+			break
 	}
 
 	const bigint = parseInt(hex, 16)
 	return [bigint >> 24 & 255, bigint >> 16 & 255, bigint >> 8 & 255, bigint & 255]
 }
+
+const convertNameToSlug = name => name.replaceAll(' ', '-').toLowerCase().replaceAll(/[^-a-z0-9]/g, '')
+
+// Also in themer (wanted themer to be self sufficient, but also wanted it here)
+// Could probably make this shorter
+const convertCamelCaseToKebabCase = i=>i.split('').reduce((a,i)=>a+(i==i.toLowerCase()?i:'-'+i.toLowerCase()))

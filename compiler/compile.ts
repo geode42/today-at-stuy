@@ -5,6 +5,7 @@ import * as brotli from "https://deno.land/x/brotli@0.1.7/mod.ts"
 import * as compress from "https://deno.land/x/compress@v0.4.5/mod.ts"
 // @deno-types="npm:@types/html-minifier-terser@7.0.0"
 import { minify } from 'npm:html-minifier-terser@7'
+import mime from "npm:mime-types@2.1.35"
 
 import { bundleLocalHTMLImports } from './htmlimportbundler.ts'
 
@@ -31,6 +32,8 @@ const html = '<!DOCTYPE html>' + await minify(bundleInfo.html, {
 await fs.emptyDir(distDirectory)
 
 async function addCompressedVersionsOfFile(path: string): Promise<void> {
+	// Don't compress fonts (they're already compressed)
+	if (mime.lookup(path).includes('font/woff2')) return
 	await Deno.writeFile(path + '.gz', compress.gzip(await Deno.readFile(path)))
 	await Deno.writeFile(path + '.br', brotli.compress(await Deno.readFile(path)))
 }

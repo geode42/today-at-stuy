@@ -1,20 +1,19 @@
 @font-face {
 	font-family: Inter;
-	src: url('../InterVariable.woff2');
+	src: url('../fonts/InterVariable.woff2');
 	font-display: swap;
 }
 
 @font-face {
 	font-family: Inter;
 	font-style: italic;
-	src: url('../InterVariable-Italic.woff2');
+	src: url('../fonts/InterVariable-Italic.woff2');
 	font-display: swap;
 }
 
 *, *:before, *:after {
 	box-sizing: border-box;
 	font-family: inherit;
-	transition: 300ms all;
 }
 
 :root, ::backdrop {

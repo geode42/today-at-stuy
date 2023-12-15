@@ -8,7 +8,8 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/element.css">
 	<link rel="stylesheet" href="css/util.css">
-	<link rel="stylesheet" href="css/optionsMenu.css">
+	<link rel="stylesheet" href="css/optionsMenu/optionsMenu.css">
+	<link rel="stylesheet" href="css/optionsMenu/editTheme.css">
 	<script src="js/utils.js" defer></script>
 	<script src="js/bellSchedules.js" defer></script>
 	<script src="js/unstableAPI.js" defer></script>
@@ -74,6 +75,42 @@
 				<div>Made by <strong>geode42</strong></div>
 				<a href="https://github.com/geode42/today-at-stuy" target="_blank" rel="noreferrer noopener">GitHub repo</a>
 			</div>
+		</div>
+	</dialog>
+	<dialog id="create-new-theme-dialog">
+		<div id="create-new-theme-menu">
+			<div id="create-new-theme-inputs">
+				<label for="create-new-theme-name-input">Name</label>
+				<input id="create-new-theme-name-input" type="text">
+		
+				<label for="create-new-theme-inherits-input">Inherits</label>
+				<select id="create-new-theme-inherits-input"></select>
+			</div>
+
+			<div id="create-new-theme-buttons">
+				<button id="create-new-theme-cancel-button">Cancel</button>
+				<button id="create-new-theme-create-button">Create</button>
+			</div>
+		</div>
+	</dialog>
+	<dialog id="edit-theme-dialog">
+		<div id="edit-theme-menu">
+			<div>
+				<button id="edit-theme-menu-close-button">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/><script xmlns=""/></svg>
+				</button>
+			</div>
+			<div id="edit-theme-theme-info">
+				<label for="edit-theme-name-input">Theme Name</label>
+				<input type="text" id="edit-theme-name-input">
+			</div>
+
+			<div id="edit-theme-properties-container">
+				<h2>Edit Properties</h2>
+				<div id="edit-theme-properties-list"></div>
+			</div>
+
+			<button id="edit-theme-delete-theme-button">Delete Theme</button>
 		</div>
 	</dialog>
 </body>

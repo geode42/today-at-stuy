@@ -1,5 +1,5 @@
 /**
- * @typedef {{ name: string, slug: string, isDarkTheme: boolean, properties: Record<string, string> }} Theme
+ * @typedef {{ name: string, slug: string, properties: Record<string, string> }} Theme
  */
 
 class Themer {
@@ -79,7 +79,7 @@ class Themer {
 	 * @returns {boolean} Whether the operation was successful
 	 */
 	remove(slug) {
-		const index = this.#themes.findIndex(i => i.slug = slug)
+		const index = this.#themes.findIndex(i => i.slug == slug)
 		if (index == -1) return false
 		this.#themes = this.#themes.filter(i => i.slug != slug)
 		return true
