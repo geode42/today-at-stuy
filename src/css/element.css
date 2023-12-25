@@ -1,3 +1,10 @@
+/* --------------------- Google Search description tests -------------------- */
+h1 {
+	color: var(--background);
+	height: 0;
+	margin: 0;
+}
+
 /* --------------------------------- button --------------------------------- */
 button {
 	background-color: var(--button);

@@ -50,6 +50,9 @@ export async function bundleLocalHTMLImports(htmlPath: string): Promise<{html: s
 
 
 		const mimeType = link.getAttribute('type') || mime.lookup(href)
+		if (link.getAttribute('rel') && link.getAttribute('rel') == 'icon') {
+			continue
+		}
 		if (link.getAttribute('rel') && link.getAttribute('rel') == 'manifest') {
 			continue
 		}
