@@ -31,6 +31,10 @@ optionsMenuCloseButton.onclick = e => {
 }
 /* -------------------------------------------------------------------------- */
 
+if ('serviceWorker' in navigator) {
+	navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+}
+
 // EST is -5 hours, EDT is -4 hours
 const secondsOffsetFromUTC = -5 * 60 * 60
 
