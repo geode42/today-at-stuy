@@ -2,6 +2,16 @@ const timeElapsedElement = getByID('time-elapsed'),
 	  timeElapsedUnitsElement = getByID('time-elapsed-units'),
 	  timeRemainingElement = getByID('time-remaining'),
 	  timeRemainingUnitsElement = getByID('time-remaining-units'),
+
+	  bigPictureTimeElapsedRemainingContainer = getByID('big-picture-time-elapsed-remaining-container'),
+	  bigPictureTimeElapsedElement = getByID('big-picture-time-elapsed'),
+	  bigPictureTimeElapsedUnitsElement = getByID('big-picture-time-elapsed-units'),
+	  bigPictureTimeRemainingElement = getByID('big-picture-time-remaining'),
+	  bigPictureTimeRemainingUnitsElement = getByID('big-picture-time-remaining-units'),
+	  bigPictureNoSchoolInfoContainer = getByID('big-picture-no-school-info-container'),
+	  bigPictureNoSchoolMessageElement = getByID('big-picture-no-school-message'),
+	  bigPictureNoSchoolReasonElement = getByID('big-picture-no-school-reason'),
+
 	  ADayBDayElement = getByID('a-day-b-day'),
 	  bellScheduleTable = getByID('bell-schedule-table'),
 	  noSchoolMessageElement = getByID('no-school-message'),
@@ -194,14 +204,20 @@ function updateStuff() {
 	/* ---------------------------- No school dialog ---------------------------- */
 	if (!schoolDay) {
 		noSchoolInfoContainer.style.display = null
+		bigPictureNoSchoolInfoContainer.style.display = null
 		timeElapsedRemainingContainer.style.display = 'none'
+		bigPictureTimeElapsedRemainingContainer.style.display = 'none'
 		changeTextContent(noSchoolMessageElement, [0, 6].includes(today) ? "Enjoy your weekend!" : "There's no school today!")
 		changeTextContent(noSchoolReasonElement, noSchoolReason)
+		changeTextContent(bigPictureNoSchoolMessageElement, [0, 6].includes(today) ? "Enjoy your weekend!" : "There's no school today!")
+		changeTextContent(bigPictureNoSchoolReasonElement, noSchoolReason)
 		updateBellScheduleTable()
 		return
 	}
 	noSchoolInfoContainer.style.display = 'none'
 	timeElapsedRemainingContainer.style.display = null
+	bigPictureNoSchoolInfoContainer.style.display = 'none'
+	bigPictureTimeElapsedRemainingContainer.style.display = null
 
 	/* --------------------------- A day B day display -------------------------- */
 	changeTextContent(ADayBDayElement, currentDayType)
@@ -270,21 +286,29 @@ function updateStuff() {
 			const textAndUnits = getElapsedTextFromSecondsElapsed(secondsElapsed)
 			changeTextContent(timeElapsedElement, textAndUnits[0])
 			changeTextContent(timeElapsedUnitsElement, textAndUnits[1])
+			changeTextContent(bigPictureTimeElapsedElement, textAndUnits[0])
+			changeTextContent(bigPictureTimeElapsedUnitsElement, textAndUnits[1])
 		
 			const secondsRemaining = currentPeriod.start - secondsSinceMidnight
 			const remainingTextAndUnits = getRemainingTextFromSecondsRemaining(secondsRemaining)
 			changeTextContent(timeRemainingElement, remainingTextAndUnits[0])
 			changeTextContent(timeRemainingUnitsElement, remainingTextAndUnits[1])
+			changeTextContent(bigPictureTimeRemainingElement, remainingTextAndUnits[0])
+			changeTextContent(bigPictureTimeRemainingUnitsElement, remainingTextAndUnits[1])
 		} else {
 			const secondsElapsed = secondsSinceMidnight - currentPeriod.start
 			const textAndUnits = getElapsedTextFromSecondsElapsed(secondsElapsed)
 			changeTextContent(timeElapsedElement, textAndUnits[0])
 			changeTextContent(timeElapsedUnitsElement, textAndUnits[1])
+			changeTextContent(bigPictureTimeElapsedElement, textAndUnits[0])
+			changeTextContent(bigPictureTimeElapsedUnitsElement, textAndUnits[1])
 		
 			const secondsRemaining = currentPeriod.end - secondsSinceMidnight
 			const remainingTextAndUnits = getRemainingTextFromSecondsRemaining(secondsRemaining)
 			changeTextContent(timeRemainingElement, remainingTextAndUnits[0])
 			changeTextContent(timeRemainingUnitsElement, remainingTextAndUnits[1])
+			changeTextContent(bigPictureTimeRemainingElement, remainingTextAndUnits[0])
+			changeTextContent(bigPictureTimeRemainingUnitsElement, remainingTextAndUnits[1])
 		}
 
 		updateBellScheduleTable()
@@ -294,16 +318,23 @@ function updateStuff() {
 		if (secondsRemaining >= 0) {
 			changeTextContent(timeElapsedElement, '-')
 			changeTextContent(timeElapsedUnitsElement, '')
+			changeTextContent(bigPictureTimeElapsedElement, '-')
+			changeTextContent(bigPictureTimeElapsedUnitsElement, '')
 			const remainingTextAndUnits = getRemainingTextFromSecondsRemaining(secondsRemaining)
 			changeTextContent(timeRemainingElement, remainingTextAndUnits[0])
 			changeTextContent(timeRemainingUnitsElement, remainingTextAndUnits[1])
+			changeTextContent(bigPictureTimeRemainingElement, remainingTextAndUnits[0])
+			changeTextContent(bigPictureTimeRemainingUnitsElement, remainingTextAndUnits[1])
 	
 			updateBellScheduleTable()
 		} else {
 			noSchoolInfoContainer.style.display = null
 			timeElapsedRemainingContainer.style.display = 'none'
+			bigPictureNoSchoolInfoContainer.style.display = null
+			bigPictureTimeElapsedRemainingContainer.style.display = 'none'
 			updateBellScheduleTable()
 			changeTextContent(noSchoolMessageElement, "Enjoy the rest of your day!")
+			changeTextContent(bigPictureNoSchoolMessageElement, "Enjoy the rest of your day!")
 		}
 	}
 }

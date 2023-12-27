@@ -53,6 +53,18 @@ main {
 }
 
 /* -------------------------------------------------------------------------- */
+/*                               cursor default                               */
+/* -------------------------------------------------------------------------- */
+
+body {
+	cursor: default;
+}
+
+*[contenteditable=true] {
+	cursor: text;
+}
+
+/* -------------------------------------------------------------------------- */
 /*                                 top section                                */
 /* -------------------------------------------------------------------------- */
 #top-section {
@@ -67,14 +79,14 @@ main {
 	width: 100%;
 }
 
-#no-school-info-container {
+#no-school-info-container, #big-picture-no-school-info-container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 0.35rem;
 }
 
-#no-school-message {
+#no-school-message, #big-picture-no-school-message {
 	font-weight: 700;
 	font-size: 1.2rem;
 }
@@ -121,7 +133,7 @@ main {
 /* -------------------------------------------------------------------------- */
 /*                       time elapsed, remaining display                      */
 /* -------------------------------------------------------------------------- */
-#time-elapsed-remaining-container {
+#time-elapsed-remaining-container, #big-picture-time-elapsed-remaining-container {
 	display: flex;
 	align-items: center;
 }

@@ -18,6 +18,9 @@ themer.add('Default Light', 'default-light', {
 	elapsedRemainingLabels: '#AAA',
 	elapsedRemainingDivider: '#DFDFDF',
 	elapsedRemainingDividerThickness: '0.09rem',
+
+	bigPictureTimeElapsed: '#65d55b',
+	bigPictureTimeRemaining: '#d94c4c',
 	
 	tableDividers: '#DFDFDF',
 	tableDividersThickness: '0.09rem',
@@ -48,6 +51,9 @@ themer.add('Default Dark', 'default-dark', {
 	elapsedRemainingLabels: '#777',
 	elapsedRemainingDivider: '#333',
 	elapsedRemainingDividerThickness: '0.09rem',
+
+	bigPictureTimeElapsed: '#65d55b',
+	bigPictureTimeRemaining: '#d94c4c',
 	
 	tableDividers: '#333',
 	tableDividerThickness: '0.09rem',

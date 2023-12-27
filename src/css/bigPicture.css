@@ -1,0 +1,44 @@
+body:has(#big-picture-overlay.open) {
+	overflow: hidden;
+}
+
+#big-picture-overlay {
+	position: absolute;
+	inset: 0;
+	background: var(--background);
+	display: grid;
+	place-items: center;
+}
+
+#big-picture-no-school-info-container {
+	gap: 0.35em;
+}
+
+#big-picture-no-school-message {
+	font-size: 1.2em;
+}
+
+#big-picture-overlay .elapsed-remaining-numbers {
+	font-size: 5em;
+}
+
+#big-picture-overlay .elapsed-remaining-units {
+	font-size: 3em;
+}
+
+#big-picture-overlay .vertical-separator {
+	height: 5em;
+	border-width: 0.08em;
+}
+
+#big-picture-time-elapsed {
+	color: var(--big-picture-time-elapsed)
+}
+
+#big-picture-time-remaining {
+	color: var(--big-picture-time-remaining)
+}
+
+#big-picture-time-elapsed-remaining-container {
+	width: 100%;
+}
