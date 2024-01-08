@@ -1,13 +1,13 @@
 @font-face {
 	font-family: Inter;
-	src: url('../fonts/InterVariable.woff2');
+	src: url('../fonts/Inter/InterVariable.woff2');
 	font-display: swap;
 }
 
 @font-face {
 	font-family: Inter;
 	font-style: italic;
-	src: url('../fonts/InterVariable-Italic.woff2');
+	src: url('../fonts/Inter/InterVariable-Italic.woff2');
 	font-display: swap;
 }
 
